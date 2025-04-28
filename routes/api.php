@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PeriodeAuditController;
 use App\Http\Controllers\SasaranStrategisController;
 use App\Http\Controllers\API\DataUserController;
 use App\Http\Controllers\Api\KriteriaController;
+use App\Http\Controllers\Api\DataInstrumenUptController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -44,7 +45,11 @@ Route::put('/kriteria/{id}', [KriteriaController::class, 'update']);
 // Route DELETE untuk hapus kriteria
 Route::delete('/kriteria/{id}', [KriteriaController::class, 'destroy']);
 
-
+Route::prefix('data-instrumen')->group(function () {
+    //Route::get('/data-instrumen-upt', [DataInstrumenUptController::class, 'index']);
+    Route::post('/', [DataInstrumenUptController::class, 'store']);
+    Route::get('/', [DataInstrumenUptController::class, 'getData']);
+});
 
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
