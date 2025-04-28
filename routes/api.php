@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PeriodeAuditController;
 use App\Http\Controllers\SasaranStrategisController;
 use App\Http\Controllers\API\DataUserController;
+use App\Http\Controllers\Api\KriteriaController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -31,6 +32,19 @@ Route::prefix('periode-audits')->group(function () {
 Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
 
 Route::apiResource('data-user', DataUserController::class);
+
+// Route GET semua kriteria
+Route::get('/kriteria', [KriteriaController::class, 'index']);
+// Route GET satu kriteria berdasarkan ID
+Route::get('/kriteria/{id}', [KriteriaController::class, 'show']);
+// Route POST satu kriteria berdasarkan ID
+Route::post('/kriteria', [KriteriaController::class, 'store']);
+// Route PUT satu kriteria berdasarkan ID
+Route::put('/kriteria/{id}', [KriteriaController::class, 'update']);
+// Route DELETE untuk hapus kriteria
+Route::delete('/kriteria/{id}', [KriteriaController::class, 'destroy']);
+
+
 
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
