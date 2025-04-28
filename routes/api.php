@@ -9,6 +9,8 @@ use App\Http\Controllers\API\DataUserController;
 use App\Http\Controllers\Api\KriteriaController;
 use App\Http\Controllers\Api\DataInstrumenUptController;
 use App\Http\Controllers\Api\DeskripsiController;
+use App\Http\Controllers\Api\TilikController;
+use App\Http\Controllers\ResponseTilikController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -61,3 +63,12 @@ Route::delete('deskripsi/{id}', [DeskripsiController::class, 'destroy']);
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});
+
+// Route CRUD Tilik
+Route::get('/tilik', [TilikController::class, 'index']); // List semua
+Route::post('/tilik', [TilikController::class, 'store']); // Simpan baru
+Route::get('/tilik/{id}', [TilikController::class, 'show']); // Detail by ID
+Route::put('/tilik/{id}', [TilikController::class, 'update']); // Update by ID
+Route::delete('/tilik/{id}', [TilikController::class, 'destroy']); // Delete by ID
+
+Route::apiResource('response-tilik', ResponseTilikController::class);
