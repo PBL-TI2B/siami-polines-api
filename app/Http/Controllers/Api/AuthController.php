@@ -31,11 +31,13 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('api-token')->plainTextToken;
+        $role = strtolower($user->role->nama_role);
+        $dashboardUrl = "/{$role}/dashboard";
 
         return response()->json([
-            'message' => 'Login berhasil.',
-            'user' => $user,
-            'token' => $token
+            'message' => "Login berhasil, Anda login sebagai {$user->role->nama_role}",
+            'token' => $token,
+            'dashboard_url' => $dashboardUrl
         ]);
     }
 

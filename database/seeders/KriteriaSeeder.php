@@ -15,14 +15,15 @@ class KriteriaSeeder extends Seeder
     public function run(): void
     {
         DB::table('kriteria')->insert([
-            ['kriteria_id' => 1, 'nama_kriteria' => 'Visi, Misi, Tujuan, Strategi'],
-            ['kriteria_id' => 2, 'nama_kriteria' => 'Tata kelola, Tata pamong, dan Kerjasama'],
-            ['kriteria_id' => 4, 'nama_kriteria' => ''],
-            ['kriteria_id' => 5, 'nama_kriteria' => ''],
-            ['kriteria_id' => 6, 'nama_kriteria' => 'Kurikulum dan Pembelajaran'],
-            ['kriteria_id' => 7, 'nama_kriteria' => 'Penelitian'],
-            ['kriteria_id' => 8, 'nama_kriteria' => ''],
-            ['kriteria_id' => 9, 'nama_kriteria' => 'Luaran Tridharma'],
+            ['nomor' => 1, 'nama_kriteria' => 'Visi, Misi, Tujuan, Strategi'],
+            ['nomor' => 2, 'nama_kriteria' => 'Tata kelola, Tata pamong, dan Kerjasama'],
+            ['nomor' => 4, 'nama_kriteria' => ''], // Menggunakan NULL jika kolom bisa null
+            ['nomor' => 5, 'nama_kriteria' => ''],
+            ['nomor' => 6, 'nama_kriteria' => 'Kurikulum dan Pembelajaran'],
+            ['nomor' => 7, 'nama_kriteria' => 'Penelitian'],
+            ['nomor' => 8, 'nama_kriteria' => ''],
+            ['nomor' => 9, 'nama_kriteria' => 'Luaran Tridharma'],
         ]);
+        
     }
 }
