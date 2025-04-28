@@ -33,11 +33,13 @@ class KriteriaController extends Controller
         // Validasi input
         $request->validate([
             'nama_kriteria' => 'required|string|max:255',
+            'nomor' => 'required|integer',  // Menambahkan validasi untuk kolom nomor
         ]);
 
         // Simpan data ke database
         $kriteria = new Kriteria();
         $kriteria->nama_kriteria = $request->nama_kriteria;
+        $kriteria->nomor = $request->nomor;  // Menambahkan kolom nomor
         $kriteria->save();
 
         return response()->json([
@@ -59,10 +61,12 @@ class KriteriaController extends Controller
         // Validasi input
         $request->validate([
             'nama_kriteria' => 'required|string|max:255',
+            'nomor' => 'required|integer',  // Menambahkan validasi untuk kolom nomor
         ]);
 
         // Update data
         $kriteria->nama_kriteria = $request->nama_kriteria;
+        $kriteria->nomor = $request->nomor;  // Menambahkan update untuk kolom nomor
         $kriteria->save();
 
         return response()->json([

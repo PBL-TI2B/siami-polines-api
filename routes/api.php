@@ -8,6 +8,7 @@ use App\Http\Controllers\SasaranStrategisController;
 use App\Http\Controllers\API\DataUserController;
 use App\Http\Controllers\Api\KriteriaController;
 use App\Http\Controllers\Api\DataInstrumenUptController;
+use App\Http\Controllers\Api\DeskripsiController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -50,6 +51,12 @@ Route::prefix('data-instrumen')->group(function () {
     Route::post('/', [DataInstrumenUptController::class, 'store']);
     Route::get('/', [DataInstrumenUptController::class, 'getData']);
 });
+
+Route::get('deskripsi', [DeskripsiController::class, 'index']);  // Mengambil semua deskripsi
+Route::get('deskripsi/kriteria/{kriteria_id}', [DeskripsiController::class, 'showByKriteria']);  // Mengambil deskripsi berdasarkan kriteria_id
+Route::post('deskripsi', [DeskripsiController::class, 'store']);  // Menambahkan route untuk POST
+Route::put('deskripsi/{id}', [DeskripsiController::class, 'update']);
+Route::delete('deskripsi/{id}', [DeskripsiController::class, 'destroy']);
 
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
