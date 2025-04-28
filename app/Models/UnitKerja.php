@@ -40,4 +40,8 @@ class UnitKerja extends Model
     {
         return $this->hasMany(UnitKerja::class, 'parent_id', 'unit_kerja_id');
     }
+    public function setInstrumens()
+    {
+        return $this->hasMany(SetInstrumen::class, 'unit_kerja_id');
+    }
 }

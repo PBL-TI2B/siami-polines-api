@@ -11,6 +11,15 @@ class SasaranStrategis extends Model
     public $timestamps = false;
     protected $table = 'sasaran_strategis';
 
-    protected $fillable = ['nama_sasaran'];
+    protected $primaryKey = 'sasaran_strategis_id';
+
+    protected $fillable = [
+        'nama_sasaran',
+    ];
+
+    public function indikatorKinerjas()
+    {
+        return $this->hasMany(IndikatorKinerja::class, 'sasaran_strategis_id');
+    }
 }
 
