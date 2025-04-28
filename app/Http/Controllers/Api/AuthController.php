@@ -75,4 +75,51 @@ class AuthController extends Controller
             'token' => $token
         ]);
     }
+    public function update(Request $request)
+    {
+        $request->merge(json_decode($request->getContent(), true));
+
+        $user = $request->user(); // User yang login
+
+        $validator = Validator::make($request->all(), [
+            'role_id' => 'integer',
+            'unit_kerja_id' => 'integer',
+            'email' => 'email|unique:users,email,' . $user->id,
+            'password' => 'min:6',
+            'nama' => 'string|max:100',
+            'nip' => 'unique:users,nip,' . $user->id,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $data = $request->only(['role_id', 'unit_kerja_id', 'email', 'password', 'nama', 'nip']);
+
+        if (isset($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        }
+
+        if (empty($data)) {
+            return response()->json([
+                'message' => 'Tidak ada data yang dikirim untuk diperbarui.'
+            ], 400);
+        }
+
+        $user->update($data);
+
+        return response()->json([
+            'message' => 'Profil berhasil diperbarui.',
+            'user' => $user->refresh()
+        ]);
+    }
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete(); // Hapus semua token user ini
+        return response()->json([
+            'message' => 'Logout berhasil.'
+        ]);
+    }
 }

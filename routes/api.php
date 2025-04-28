@@ -12,15 +12,20 @@ use App\Http\Controllers\Api\DeskripsiController;
 use App\Http\Controllers\Api\TilikController;
 use App\Http\Controllers\ResponseTilikController;
 
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+// endpoint register (tidak butuh login)
+//Route::post('/register', [RegisterController::class, 'register']);
 
-// enpdoint register /api/register
-// Route::post('/register', [RegisterController::class, 'register']);
-
-// endpoint login /api/login
+// endpoint login (tidak butuh login)
 Route::post('/login', [AuthController::class, 'login']);
+
+// Group route yang butuh login (auth:sanctum)
+Route::middleware('auth:sanctum')->group(function () {
+    // update profile
+    Route::put('/user/update', [AuthController::class, 'update']);
+
+    // logout
+    Route::delete('/logout', [AuthController::class, 'logout']);
+});
 
 Route::prefix('periode-audits')->group(function () {
     Route::get('/', [PeriodeAuditController::class, 'index']);
