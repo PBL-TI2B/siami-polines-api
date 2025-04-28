@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PeriodeAuditController;
 use App\Http\Controllers\SasaranStrategisController;
+use App\Http\Controllers\API\DataUserController;
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
@@ -28,3 +29,9 @@ Route::prefix('periode-audits')->group(function () {
 });
 
 Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
+
+Route::apiResource('data-user', DataUserController::class);
+
+//Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
+    //Route::apiResource('users', DataUserController::class);
+//});
