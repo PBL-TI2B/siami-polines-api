@@ -10,7 +10,7 @@ use App\Http\Controllers\Api\KriteriaController;
 use App\Http\Controllers\Api\DataInstrumenUptController;
 use App\Http\Controllers\Api\DeskripsiController;
 use App\Http\Controllers\Api\TilikController;
-use App\Http\Controllers\ResponseTilikController;
+use App\Http\Controllers\Api\ResponseTilikController;
 
 // endpoint register (tidak butuh login)
 //Route::post('/register', [RegisterController::class, 'register']);

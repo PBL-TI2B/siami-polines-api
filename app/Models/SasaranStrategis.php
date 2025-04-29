@@ -17,7 +17,7 @@ class SasaranStrategis extends Model
         'nama_sasaran',
     ];
 
-    public function indikatorKinerjas()
+    public function indikatorKinerja()
     {
         return $this->hasMany(IndikatorKinerja::class, 'sasaran_strategis_id');
     }

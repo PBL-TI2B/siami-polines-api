@@ -17,6 +17,7 @@ class IndikatorKinerja extends Model
         'sasaran_strategis_id',
         'isi_indikator_kinerja',
     ];
+    public $timestamps = false;
 
     public function sasaranStrategis()
     {

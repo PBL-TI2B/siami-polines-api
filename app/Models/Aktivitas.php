@@ -20,7 +20,7 @@ class Aktivitas extends Model
         'satuan',
         'target',
     ];
-
+    public $timestamps = false;
     public function indikatorKinerja()
     {
         return $this->belongsTo(IndikatorKinerja::class, 'indikator_kinerja_id');
