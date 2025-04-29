@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\PeriodeAuditController;
 use App\Http\Controllers\API\DataUserController;
 use App\Http\Controllers\Api\KriteriaController;
 use App\Http\Controllers\Api\DataInstrumenUptController;
+use App\Http\Controllers\Api\DataUnitController;
 use App\Http\Controllers\Api\DeskripsiController;
 use App\Http\Controllers\Api\TilikController;
 use App\Http\Controllers\Api\ResponseTilikController;
@@ -84,4 +85,10 @@ Route::delete('/tilik/{id}', [TilikController::class, 'destroy']); // Delete by 
 
 Route::apiResource('response-tilik', ResponseTilikController::class);
 
-
+Route::prefix('unit-kerja')->group(function() {
+    Route::get('/', [DataUnitController::class, 'readAll']);
+    Route::get('/{unit}', [DataUnitController::class, 'readByUnit']);
+    Route::post('/{unit}', [DataUnitController::class, 'store']);
+    Route::put('/{id}', [DataUnitController::class, 'update']);
+    Route::delete('/{id}', [DataUnitController::class, 'destroy']);
+});
