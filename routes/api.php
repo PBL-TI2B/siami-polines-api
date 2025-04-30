@@ -54,11 +54,7 @@ Route::put('/kriteria/{id}', [KriteriaController::class, 'update']);
 // Route DELETE untuk hapus kriteria
 Route::delete('/kriteria/{id}', [KriteriaController::class, 'destroy']);
 
-Route::prefix('data-instrumen')->group(function () {
-    //Route::get('/data-instrumen-upt', [DataInstrumenUptController::class, 'index']);
-    Route::post('/', [DataInstrumenUptController::class, 'store']);
-    Route::get('/', [DataInstrumenUptController::class, 'getData']);
-});
+Route::apiResource('data-instrumen', DataInstrumenUptController::class);
 
 Route::get('deskripsi', [DeskripsiController::class, 'index']);  // Mengambil semua deskripsi
 Route::get('deskripsi/kriteria/{kriteria_id}', [DeskripsiController::class, 'showByKriteria']);  // Mengambil deskripsi berdasarkan kriteria_id
