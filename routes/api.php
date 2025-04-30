@@ -4,13 +4,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PeriodeAuditController;
-use App\Http\Controllers\SasaranStrategisController;
 use App\Http\Controllers\API\DataUserController;
 use App\Http\Controllers\Api\KriteriaController;
 use App\Http\Controllers\Api\DataInstrumenUptController;
+use App\Http\Controllers\Api\DataUnitController;
 use App\Http\Controllers\Api\DeskripsiController;
 use App\Http\Controllers\Api\TilikController;
 use App\Http\Controllers\Api\ResponseTilikController;
+use App\Http\Controllers\Api\UnsurController;
 
 // endpoint register (tidak butuh login)
 //Route::post('/register', [RegisterController::class, 'register']);
@@ -38,7 +39,7 @@ Route::prefix('periode-audits')->group(function () {
     Route::delete('/{id}', [PeriodeAuditController::class, 'destroy']);
 });
 
-Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
+// Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
 
 Route::apiResource('data-user', DataUserController::class);
 
@@ -65,6 +66,12 @@ Route::post('deskripsi', [DeskripsiController::class, 'store']);  // Menambahkan
 Route::put('deskripsi/{id}', [DeskripsiController::class, 'update']);
 Route::delete('deskripsi/{id}', [DeskripsiController::class, 'destroy']);
 
+// GET semua data unsur
+Route::get('unsur', [UnsurController::class, 'index']);
+// GET unsur berdasarkan ID
+Route::get('unsur/{id}', [UnsurController::class, 'show']);
+
+
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});
@@ -77,3 +84,11 @@ Route::put('/tilik/{id}', [TilikController::class, 'update']); // Update by ID
 Route::delete('/tilik/{id}', [TilikController::class, 'destroy']); // Delete by ID
 
 Route::apiResource('response-tilik', ResponseTilikController::class);
+
+Route::prefix('unit-kerja')->group(function() {
+    Route::get('/', [DataUnitController::class, 'readAll']);
+    Route::get('/{unit}', [DataUnitController::class, 'readByUnit']);
+    Route::post('/{unit}', [DataUnitController::class, 'store']);
+    Route::put('/{id}', [DataUnitController::class, 'update']);
+    Route::delete('/{id}', [DataUnitController::class, 'destroy']);
+});
