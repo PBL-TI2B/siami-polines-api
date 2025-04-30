@@ -13,11 +13,9 @@ class DataInstrumenUptController extends Controller
 {
     public function index()
     {
-        $data = SasaranStrategis::with([
-            'indikatorKinerjas.aktivitas.setInstrumens.unitKerja'
-        ])->get();
-
+        $data=SasaranStrategis::with(['indikatorKinerja','indikatorKinerja.aktivitas'])->get();
         return response()->json($data);
+
     }
 
     public function store(Request $request)
@@ -88,22 +86,4 @@ class DataInstrumenUptController extends Controller
         }
     }
 
-    public function getData()
-    {
-        $data = SasaranStrategis::select(
-            'sasaran_strategis.nama_sasaran as sasaran_strategis',
-            'indikator_kinerja.isi_indikator_kinerja as indikator_kinerja',
-            'aktivitas.nama_aktivitas as aktivitas',
-            'aktivitas.satuan as satuan',
-            'aktivitas.target as target_2022'
-        )
-        ->leftJoin('indikator_kinerja', 'sasaran_strategis.sasaran_strategis_id', '=', 'indikator_kinerja.sasaran_strategis_id')
-        ->leftJoin('aktivitas', 'indikator_kinerja.indikator_kinerja_id', '=', 'aktivitas.indikator_kinerja_id')
-        ->orderBy('sasaran_strategis.sasaran_strategis_id')
-        ->orderBy('indikator_kinerja.indikator_kinerja_id')
-        ->orderBy('aktivitas.aktivitas_id')
-        ->get();
-
-        return response()->json($data);
-    }
 }
