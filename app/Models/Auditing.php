@@ -8,6 +8,9 @@ class Auditing extends Model
 {
     protected $table = 'auditings';
     protected $primaryKey = 'auditing_id';
+
+    public $timestamps = false;
+    
     protected $fillable = [
         'user_id_1_auditor',
         'user_id_2_auditor',
@@ -15,6 +18,7 @@ class Auditing extends Model
         'user_id_2_auditee',
         'unit_kerja_id',
         'periode_id',
+        'jadwal_audit',
         'status',
     ];
 

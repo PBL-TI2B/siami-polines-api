@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\KriteriaController;
 use App\Http\Controllers\Api\DataInstrumenUptController;
 use App\Http\Controllers\Api\DataUnitController;
 use App\Http\Controllers\Api\DeskripsiController;
+use App\Http\Controllers\Api\PenjadwalanController;
 use App\Http\Controllers\Api\TilikController;
 use App\Http\Controllers\Api\ResponseTilikController;
 use App\Http\Controllers\Api\UnsurController;
@@ -87,4 +88,11 @@ Route::prefix('unit-kerja')->group(function() {
     Route::post('/{unit}', [DataUnitController::class, 'store']);
     Route::put('/{id}', [DataUnitController::class, 'update']);
     Route::delete('/{id}', [DataUnitController::class, 'destroy']);
+});
+
+Route::prefix('penjadwalan')->group(function(){
+    Route::post('/', [PenjadwalanController::class, 'store']);
+    Route::get('/', [PenjadwalanController::class, 'readAll']);
+    Route::put('/{id}', [PenjadwalanController::class, 'edit']);
+    Route::delete('/', [PenjadwalanController::class, 'delete']);
 });
