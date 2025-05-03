@@ -66,7 +66,12 @@ Route::delete('deskripsi/{id}', [DeskripsiController::class, 'destroy']);
 // GET semua data unsur
 Route::get('unsur', [UnsurController::class, 'index']);
 // GET unsur berdasarkan ID
-Route::get('unsur/{id}', [UnsurController::class, 'show']);
+Route::get('unsur/{id}', [UnsurController::class, 'show']);  
+Route::post('unsur', [UnsurController::class, 'store']);
+Route::put('unsur/{id}', [UnsurController::class, 'update']);
+Route::delete('unsur/{id}', [UnsurController::class, 'destroy']);
+
+
 
 
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
