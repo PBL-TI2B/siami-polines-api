@@ -216,4 +216,24 @@ class DataUserController extends Controller
             ], 500);
         }
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $ids = $request->input('selected_users', []);
+
+        \Log::info('Bulk destroy IDs: ', $ids);
+
+        if (!empty($ids)) {
+            $users = User::whereIn('id', $ids)->get();
+            foreach ($users as $user) {
+                if ($user->photo) {
+                    Storage::disk('public')->delete($user->photo);
+                }
+                $user->delete();
+            }
+            return redirect()->route('data-user.index')->with('success', 'Users berhasil dihapus');
+        }
+
+        return redirect()->route('data-user.index')->with('error', 'Tidak ada user yang dipilih.');
+    }
 }
