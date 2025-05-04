@@ -37,7 +37,8 @@ class AuthController extends Controller
         return response()->json([
             'message' => "Login berhasil, Anda login sebagai {$user->role->nama_role}",
             'token' => $token,
-            'dashboard_url' => $dashboardUrl
+            'dashboard_url' => $dashboardUrl,
+            'role' => $role
         ]);
     }
 
@@ -117,7 +118,12 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete(); // Hapus semua token user ini
+        if (!$request->user()) {
+            return response()->json(['message' => 'User tidak terautentikasi'], 401);
+        }
+
+        $request->user()->tokens()->delete();
+
         return response()->json([
             'message' => 'Logout berhasil.'
         ]);
