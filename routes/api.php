@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\PenjadwalanController;
 use App\Http\Controllers\Api\TilikController;
 use App\Http\Controllers\Api\ResponseTilikController;
 use App\Http\Controllers\Api\UnsurController;
+use App\Http\Controllers\Api\AuditingController; 
 
 // endpoint register (tidak butuh login)
 //Route::post('/register', [RegisterController::class, 'register']);
@@ -100,4 +101,14 @@ Route::prefix('penjadwalan')->group(function(){
     Route::get('/', [PenjadwalanController::class, 'readAll']);
     Route::put('/{id}', [PenjadwalanController::class, 'edit']);
     Route::delete('/', [PenjadwalanController::class, 'delete']);
+});
+
+
+// auditing routes
+Route::prefix('auditings')->group(function () {
+    Route::get('/', [AuditingController::class, 'index']);           // Menampilkan semua data auditing
+    Route::post('/', [AuditingController::class, 'store']);          // Menyimpan data auditing baru
+    Route::get('{id}', [AuditingController::class, 'show']);         // Menampilkan detail auditing berdasarkan ID
+    Route::put('{id}', [AuditingController::class, 'update']);       // Mengupdate data auditing
+    Route::delete('{id}', [AuditingController::class, 'destroy']);   // Menghapus data auditing
 });
