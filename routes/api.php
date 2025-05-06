@@ -15,10 +15,8 @@ use App\Http\Controllers\Api\ResponseTilikController;
 use App\Http\Controllers\Api\UnsurController;
 use App\Http\Controllers\Api\AuditingController; 
 
-// endpoint register (tidak butuh login)
-//Route::post('/register', [RegisterController::class, 'register']);
-
-// endpoint login (tidak butuh login)
+//route autentikasi
+// endpoint login (tidak butuh regist)
 Route::post('/login', [AuthController::class, 'login']);
 
 // Group route yang butuh login (auth:sanctum)
@@ -30,6 +28,43 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/logout', [AuthController::class, 'logout']);
 });
 
+// route auditing -> tabel auditing
+Route::prefix('auditings')->group(function () {
+    Route::get('/', [AuditingController::class, 'index']);           // Menampilkan semua data auditing
+    Route::post('/', [AuditingController::class, 'store']);          // Menyimpan data auditing baru
+    Route::get('{id}', [AuditingController::class, 'show']);         // Menampilkan detail auditing berdasarkan ID
+    Route::put('{id}', [AuditingController::class, 'update']);       // Mengupdate data auditing
+    Route::delete('{id}', [AuditingController::class, 'destroy']);   // Menghapus data auditing
+});
+
+// route unit-kerja -> tabel unit_kerja
+Route::prefix('unit-kerja')->group(function() {
+    Route::get('/', [DataUnitController::class, 'readAll']);
+    Route::get('/{unit}', [DataUnitController::class, 'readByUnit']);
+    Route::post('/{unit}', [DataUnitController::class, 'store']);
+    Route::put('/{id}', [DataUnitController::class, 'update']);
+    Route::delete('/{id}', [DataUnitController::class, 'destroy']);
+});
+
+// route kriteria -> tabel kriteria
+Route::prefix('kriteria')->controller(KriteriaController::class)->group(function () {
+    Route::get('/', 'index');          // GET semua kriteria
+    Route::get('/{id}', 'show');       // GET satu kriteria berdasarkan ID
+    Route::post('/', 'store');         // POST satu kriteria
+    Route::put('/{id}', 'update');     // PUT satu kriteria berdasarkan ID
+    Route::delete('/{id}', 'destroy'); // DELETE satu kriteria berdasarkan ID
+});
+
+// route deskripsi -> tabel deskripsi
+Route::prefix('deskripsi')->controller(DeskripsiController::class)->group(function () {
+    Route::get('/', 'index'); // Mengambil semua deskripsi
+    Route::get('/kriteria/{kriteria_id}', 'showByKriteria'); // Berdasarkan kriteria_id
+    Route::post('/', 'store'); // Menambahkan deskripsi
+    Route::put('/{id}', 'update'); // Memperbarui deskripsi
+    Route::delete('/{id}', 'destroy'); // Menghapus deskripsi
+});
+
+// route periode audit -> tabel periode
 Route::prefix('periode-audits')->group(function () {
     Route::get('/', [PeriodeAuditController::class, 'index']);
     Route::post('/', [PeriodeAuditController::class, 'store']);
@@ -41,74 +76,38 @@ Route::prefix('periode-audits')->group(function () {
     Route::delete('/{id}', [PeriodeAuditController::class, 'destroy']);
 });
 
+// route unsur -> tabel unsur
+Route::prefix('unsur')->controller(UnsurController::class)->group(function () {
+    Route::get('/', 'index');         // Mengambil semua unsur
+    Route::get('/{id}', 'show');      // Mengambil satu unsur berdasarkan ID
+    Route::post('/', 'store');        // Menambahkan unsur
+    Route::put('/{id}', 'update');    // Memperbarui unsur
+    Route::delete('/{id}', 'destroy');// Menghapus unsur
+});
+
+//route tilik -> tabel tilik
+Route::prefix('tilik')->controller(TilikController::class)->group(function () {
+    Route::get('/', 'index');          // List semua
+    Route::post('/', 'store');         // Simpan baru
+    Route::get('/{id}', 'show');       // Detail by ID
+    Route::put('/{id}', 'update');     // Update by ID
+    Route::delete('/{id}', 'destroy'); // Delete by ID
+});
+
+
+// dibawah ini route gatauuu >_<
+
 // Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
-
 Route::apiResource('data-user', DataUserController::class);
-
-// Route GET semua kriteria
-Route::get('/kriteria', [KriteriaController::class, 'index']);
-// Route GET satu kriteria berdasarkan ID
-Route::get('/kriteria/{id}', [KriteriaController::class, 'show']);
-// Route POST satu kriteria berdasarkan ID
-Route::post('/kriteria', [KriteriaController::class, 'store']);
-// Route PUT satu kriteria berdasarkan ID
-Route::put('/kriteria/{id}', [KriteriaController::class, 'update']);
-// Route DELETE untuk hapus kriteria
-Route::delete('/kriteria/{id}', [KriteriaController::class, 'destroy']);
-
 Route::apiResource('data-instrumen', DataInstrumenUptController::class);
-
-Route::get('deskripsi', [DeskripsiController::class, 'index']);  // Mengambil semua deskripsi
-Route::get('deskripsi/kriteria/{kriteria_id}', [DeskripsiController::class, 'showByKriteria']);  // Mengambil deskripsi berdasarkan kriteria_id
-Route::post('deskripsi', [DeskripsiController::class, 'store']);  // Menambahkan route untuk POST
-Route::put('deskripsi/{id}', [DeskripsiController::class, 'update']);
-Route::delete('deskripsi/{id}', [DeskripsiController::class, 'destroy']);
-
-// GET semua data unsur
-Route::get('unsur', [UnsurController::class, 'index']);
-// GET unsur berdasarkan ID
-Route::get('unsur/{id}', [UnsurController::class, 'show']);  
-Route::post('unsur', [UnsurController::class, 'store']);
-Route::put('unsur/{id}', [UnsurController::class, 'update']);
-Route::delete('unsur/{id}', [UnsurController::class, 'destroy']);
-
-
-
-
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});
-
-// Route CRUD Tilik
-Route::get('/tilik', [TilikController::class, 'index']); // List semua
-Route::post('/tilik', [TilikController::class, 'store']); // Simpan baru
-Route::get('/tilik/{id}', [TilikController::class, 'show']); // Detail by ID
-Route::put('/tilik/{id}', [TilikController::class, 'update']); // Update by ID
-Route::delete('/tilik/{id}', [TilikController::class, 'destroy']); // Delete by ID
-
 Route::apiResource('response-tilik', ResponseTilikController::class);
-
-Route::prefix('unit-kerja')->group(function() {
-    Route::get('/', [DataUnitController::class, 'readAll']);
-    Route::get('/{unit}', [DataUnitController::class, 'readByUnit']);
-    Route::post('/{unit}', [DataUnitController::class, 'store']);
-    Route::put('/{id}', [DataUnitController::class, 'update']);
-    Route::delete('/{id}', [DataUnitController::class, 'destroy']);
-});
 
 Route::prefix('penjadwalan')->group(function(){
     Route::post('/', [PenjadwalanController::class, 'store']);
     Route::get('/', [PenjadwalanController::class, 'readAll']);
     Route::put('/{id}', [PenjadwalanController::class, 'edit']);
     Route::delete('/', [PenjadwalanController::class, 'delete']);
-});
-
-
-// auditing routes
-Route::prefix('auditings')->group(function () {
-    Route::get('/', [AuditingController::class, 'index']);           // Menampilkan semua data auditing
-    Route::post('/', [AuditingController::class, 'store']);          // Menyimpan data auditing baru
-    Route::get('{id}', [AuditingController::class, 'show']);         // Menampilkan detail auditing berdasarkan ID
-    Route::put('{id}', [AuditingController::class, 'update']);       // Mengupdate data auditing
-    Route::delete('{id}', [AuditingController::class, 'destroy']);   // Menghapus data auditing
 });
