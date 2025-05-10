@@ -15,4 +15,9 @@ class Menu extends Model
     {
         return $this->hasMany(SubMenu::class, 'menu_id', 'menu_id');
     }
+
+    public function roleMenuAccesses()
+    {
+        return $this->hasMany(RoleMenuAccess::class, 'menu_id', 'menu_id');
+    }
 }

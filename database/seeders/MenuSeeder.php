@@ -14,6 +14,7 @@ class MenuSeeder extends Seeder
         Menu::query()->delete(); // Ini akan memicu ON DELETE CASCADE di role_menu_access
         SubMenu::query()->delete();
 
+        // ROLE ADMIN
         $dashboard = Menu::create([
             'nama_menu' => 'Dashboard',
             'route' => 'dashboard.index',
@@ -38,6 +39,12 @@ class MenuSeeder extends Seeder
             'icon' => 'heroicon-o-check-circle',
         ]);
 
+        $assesmenLapangan = Menu::create([
+            'nama_menu' => 'Assesmen Lapangan',
+            'route' => 'assesmen-lapangan.index',
+            'icon' => 'heroicon-o-map',
+        ]);
+
         $dataUnit = Menu::create([
             'nama_menu' => 'Data Unit',
             'route' => 'unit-kerja.index',
@@ -56,17 +63,18 @@ class MenuSeeder extends Seeder
             'icon' => 'heroicon-o-users',
         ]);
 
+         $ptpp = Menu::create([
+            'nama_menu' => 'PTPP',
+            'route' => 'ptpp.index',
+            'icon' => 'heroicon-o-document-check',
+        ]);
+
         $laporan = Menu::create([
             'nama_menu' => 'Laporan',
             'route' => 'laporan.index',
             'icon' => 'heroicon-o-document-text',
         ]);
 
-        $logout = Menu::create([
-            'nama_menu' => 'Logout',
-            'route' => 'logout',
-            'icon' => 'heroicon-o-arrow-left-on-rectangle',
-        ]);
 
         // Submenu untuk Data Unit
         SubMenu::create([

@@ -8,19 +8,21 @@ class Role extends Model
 {
     protected $table = 'roles';
     protected $primaryKey = 'role_id';
-    protected $fillable = ['nama_role'];
-    public $timestamps = false; // Sesuaikan dengan kebutuhan
+    protected $fillable = ['nama_role', 'prefix'];
+    public $timestamps = false;
 
-
-    // Relasi: Role memiliki banyak User
     public function users()
     {
         return $this->hasMany(User::class, 'role_id', 'role_id');
     }
 
-    // Relasi: Role memiliki banyak RoleMenuAccess
     public function roleMenuAccesses()
     {
         return $this->hasMany(RoleMenuAccess::class, 'role_id', 'role_id');
+    }
+
+    public function roleSubMenuAccesses()
+    {
+        return $this->hasMany(RoleSubMenuAccess::class, 'role_id', 'role_id');
     }
 }

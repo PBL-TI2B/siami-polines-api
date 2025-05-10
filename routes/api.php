@@ -13,11 +13,13 @@ use App\Http\Controllers\Api\PenjadwalanController;
 use App\Http\Controllers\Api\TilikController;
 use App\Http\Controllers\Api\ResponseTilikController;
 use App\Http\Controllers\Api\UnsurController;
-use App\Http\Controllers\Api\AuditingController; 
+use App\Http\Controllers\Api\AuditingController;
+use App\Http\Controllers\Api\SidebarMenuController;
 
 //route autentikasi
 // endpoint login (tidak butuh regist)
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/sidebar-menu', [SidebarMenuController::class, 'getSidebarMenus']);
 
 // Group route yang butuh login (auth:sanctum)
 Route::middleware('auth:sanctum')->group(function () {
