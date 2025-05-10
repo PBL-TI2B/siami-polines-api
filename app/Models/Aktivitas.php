@@ -9,11 +9,8 @@ class Aktivitas extends Model
 {
     //
     use HasFactory;
-
     protected $table = 'aktivitas';
-
     protected $primaryKey = 'aktivitas_id';
-
     protected $fillable = [
         'indikator_kinerja_id',
         'nama_aktivitas',
@@ -25,10 +22,8 @@ class Aktivitas extends Model
     {
         return $this->belongsTo(IndikatorKinerja::class, 'indikator_kinerja_id');
     }
-
-    public function setInstrumens()
-    {
-        return $this->hasMany(SetInstrumen::class, 'aktivitas_id');
-    }
-
+    // public function setInstrumens()
+    // {
+    //     return $this->hasMany(SetInstrumen::class, 'aktivitas_id');
+    // }
 }

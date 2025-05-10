@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\UnsurController;
 use App\Http\Controllers\Api\AuditingController;
 use App\Http\Controllers\Api\SidebarMenuController;
 use App\Http\Controllers\Api\SasaranStrategisController;
+use App\Http\Controllers\Api\IndikatorKinerjaController;
 
 //route autentikasi
 // endpoint login (tidak butuh regist)
@@ -98,6 +99,22 @@ Route::prefix('tilik')->controller(TilikController::class)->group(function () {
 });
 
 Route::prefix('sasaran-strategis')->controller(SasaranStrategisController::class)->group(function () {
+    Route::get('/', 'index');          // List semua
+    Route::post('/', 'store');         // Simpan baru
+    Route::get('/{id}', 'show');       // Detail by ID
+    Route::put('/{id}', 'update');     // Update by ID
+    Route::delete('/{id}', 'destroy'); // Delete by ID
+});
+
+Route::prefix('indikator-kinerja')->controller(IndikatorKinerjaController::class)->group(function () {
+    Route::get('/', 'index');          // List semua
+    Route::post('/', 'store');         // Simpan baru
+    Route::get('/{id}', 'show');       // Detail by ID
+    Route::put('/{id}', 'update');     // Update by ID
+    Route::delete('/{id}', 'destroy'); // Delete by ID
+});
+
+Route::prefix('aktivitas')->controller(IndikatorKinerjaController::class)->group(function () {
     Route::get('/', 'index');          // List semua
     Route::post('/', 'store');         // Simpan baru
     Route::get('/{id}', 'show');       // Detail by ID
