@@ -20,10 +20,23 @@ class DataUnitController extends Controller
 
         $request->validate([
             'nama_unit_kerja' => 'required|string|max:255',
+            'jurusan' => 'nullable|string',
         ]);
+
+        $parentId = null;
+        if ($request->filled('jurusan')) {
+            $parent = UnitKerja::where('nama_unit_kerja', $request->jurusan)->first();
+            if (!$parent) {
+                return response()->json([
+                    'message' => 'nama jurusan tidak ditemukan',
+                ]);
+            }
+            $parentId = $parent->unit_kerja_id;
+        }
 
         $unitKerja = UnitKerja::create([
             'nama_unit_kerja' => $request->nama_unit_kerja,
+            'parent_id' => $parentId,
             'jenis_unit_id' => $jenisUnit->jenis_unit_id,
         ]);
 
@@ -54,6 +67,7 @@ class DataUnitController extends Controller
     public function update(Request $request, $id) {
         $request -> validate([
             'nama_unit_kerja' => 'required|string|max:255',
+            'jurusan' => 'nullable|string',
         ]);
 
         $unitKerja = UnitKerja::find($id);
@@ -64,8 +78,20 @@ class DataUnitController extends Controller
             ], 404);
         }
 
+        $parentId = null;
+        if ($request->filled('jurusan')) {
+            $parent = UnitKerja::where('nama_unit_kerja', $request->jurusan)->first();
+            if (!$parent) {
+                return response()->json([
+                    'message' => 'nama jurusan tidak ditemukan',
+                ]);
+            }
+            $parentId = $parent->unit_kerja_id;
+        }
+
         if ($request->has('nama_unit_kerja')) {
             $unitKerja->nama_unit_kerja = $request->nama_unit_kerja;
+            $unitKerja->parent_id = $parentId;
         }
 
         $unitKerja->save();
