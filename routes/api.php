@@ -122,10 +122,18 @@ Route::prefix('aktivitas')->controller(IndikatorKinerjaController::class)->group
     Route::delete('/{id}', 'destroy'); // Delete by ID
 });
 
+Route::prefix('data-user')->controller(DataUserController::class)->group(function () {
+    Route::get('/', 'index');               // List all users
+    Route::post('/', 'store');              // Create a new user
+    Route::get('/{id}', 'show');            // Get by ID
+    Route::put('/{id}', 'update');          // Update by ID
+    Route::delete('/{id}', 'destroy');      // Delete by ID
+    Route::delete('/bulk-destroy', 'bulkDelete'); // Bulk delete users
+});
+
 // dibawah ini route gatauuu >_<
 
 // Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
-Route::apiResource('data-user', DataUserController::class);
 Route::apiResource('data-instrumen', DataInstrumenUptController::class);
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
