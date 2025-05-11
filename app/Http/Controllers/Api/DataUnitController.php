@@ -47,7 +47,7 @@ class DataUnitController extends Controller
     }
 
     public function readAll() {
-        $unitKerja = UnitKerja::with('jenisUnit')->get();
+        $unitKerja = UnitKerja::with('jenisUnit', 'parent')->get();
         return response()->json([
             'message' => 'Data unit kerja berhasil ditampilkan',
             'data' => $unitKerja,
@@ -57,7 +57,7 @@ class DataUnitController extends Controller
     public function readByUnit($unit) {
         $jenisUnit = JenisUnit::where('nama_jenis_unit', $unit)->first();
 
-        $unitKerja = UnitKerja::with('jenisUnit')->where('jenis_unit_id', $jenisUnit->jenis_unit_id)->get();
+        $unitKerja = UnitKerja::with('jenisUnit', 'parent')->where('jenis_unit_id', $jenisUnit->jenis_unit_id)->get();
         return response()->json([
             'message' => 'Data unit kerja berhasil ditampilkan',
             'data' => $unitKerja,
