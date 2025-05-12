@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\AuditingController;
 use App\Http\Controllers\Api\SidebarMenuController;
 use App\Http\Controllers\Api\SasaranStrategisController;
 use App\Http\Controllers\Api\IndikatorKinerjaController;
+use App\Http\Controllers\Api\AktivitasController;
 use App\Http\Controllers\Api\SetIntrumenController;
 
 //route autentikasi
@@ -115,7 +116,7 @@ Route::prefix('indikator-kinerja')->controller(IndikatorKinerjaController::class
     Route::delete('/{id}', 'destroy'); // Delete by ID
 });
 
-Route::prefix('aktivitas')->controller(IndikatorKinerjaController::class)->group(function () {
+Route::prefix('aktivitas')->controller(AktivitasController::class)->group(function () {
     Route::get('/', 'index');          // List semua
     Route::post('/', 'store');         // Simpan baru
     Route::get('/{id}', 'show');       // Detail by ID
