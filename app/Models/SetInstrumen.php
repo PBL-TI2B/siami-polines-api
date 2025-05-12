@@ -14,10 +14,14 @@ class SetInstrumen extends Model
     protected $table = 'set_instrumen';
 
     protected $primaryKey = 'set_instrumen_unit_kerja_id';
+    public $incrementing = true; // jika auto-increment
+    protected $keyType = 'int';  // jika tipe intege
+    public $timestamps = false;
 
     protected $fillable = [
         'unit_kerja_id',
         'aktivitas_id',
+        'unsur_id',
     ];
 
     public function unitKerja()
@@ -28,6 +32,11 @@ class SetInstrumen extends Model
     public function aktivitas()
     {
         return $this->belongsTo(Aktivitas::class, 'aktivitas_id');
+    }
+
+    public function unsur()
+    {
+        return $this->belongsTo(Unsur::class, 'unsur_id');
     }
     
 }

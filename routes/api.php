@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\AuditingController;
 use App\Http\Controllers\Api\SidebarMenuController;
 use App\Http\Controllers\Api\SasaranStrategisController;
 use App\Http\Controllers\Api\IndikatorKinerjaController;
+use App\Http\Controllers\Api\SetIntrumenController;
 
 //route autentikasi
 // endpoint login (tidak butuh regist)
@@ -145,4 +146,11 @@ Route::prefix('penjadwalan')->group(function(){
     Route::get('/', [PenjadwalanController::class, 'readAll']);
     Route::put('/{id}', [PenjadwalanController::class, 'edit']);
     Route::delete('/', [PenjadwalanController::class, 'delete']);
+});
+
+Route::prefix('set-instrumen')->group(function(){
+    Route::post('/', [SetIntrumenController::class, 'store']);
+    Route::get('/', [SetIntrumenController::class, 'readAll']);
+    Route::put('/{id}', [SetIntrumenController::class, 'update']);
+    Route::delete('/{id}', [SetIntrumenController::class, 'destroy']);
 });
