@@ -155,7 +155,7 @@ class MenuSeeder extends Seeder
         SubMenu::create([
             'nama_sub_menu' => 'Instrumen Prodi',
             'menu_id' => $dataInstrumen->menu_id,
-            'route' => 'data-instrumen.index',
+            'route' => 'data-instrumen.instrumenprodi',
             'icon' => 'heroicon-o-clipboard-document',
             'route_params' => json_encode(['type' => 'prodi']),
         ]);
@@ -163,7 +163,7 @@ class MenuSeeder extends Seeder
         SubMenu::create([
             'nama_sub_menu' => 'Instrumen Jurusan',
             'menu_id' => $dataInstrumen->menu_id,
-            'route' => 'data-instrumen.index',
+            'route' => 'data-instrumen.instrumenjurusan',
             'icon' => 'heroicon-o-clipboard-document',
             'route_params' => json_encode(['type' => 'jurusan']),
         ]);
