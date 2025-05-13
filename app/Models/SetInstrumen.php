@@ -38,5 +38,15 @@ class SetInstrumen extends Model
     {
         return $this->belongsTo(Unsur::class, 'unsur_id');
     }
-    
+    public function getDeskripsiAttribute()
+    {
+        return $this->unsur ? $this->unsur->deskripsi : null;
+    }
+
+    public function getKriteriaAttribute()
+    {
+        return $this->unsur && $this->unsur->deskripsi
+            ? $this->unsur->deskripsi->kriteria
+            : null;
+    }
 }

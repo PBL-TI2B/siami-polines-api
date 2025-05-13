@@ -35,7 +35,12 @@ class SetIntrumenController extends Controller
     }
 
     public function readAll() {
-        $setInstrumen = SetInstrumen::with('unitKerja', 'aktivitas', 'unsur')->get();
+        $setInstrumen = SetInstrumen::with([
+            'unitKerja',
+            'aktivitas',
+            'unsur.deskripsi.kriteria' // include relasi berantai agar eager loading optimal
+        ])->get();
+
         return response()->json([
             'message' => 'Data SetInstrumen berhasil ditampilkan',
             'data' => $setInstrumen,
