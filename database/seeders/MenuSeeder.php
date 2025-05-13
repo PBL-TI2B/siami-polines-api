@@ -27,22 +27,22 @@ class MenuSeeder extends Seeder
             'icon' => 'heroicon-o-calendar-days',
         ]);
 
-        $jadwalAudit = Menu::create([
-            'nama_menu' => 'Jadwal Audit',
-            'route' => 'jadwal-audit.index',
-            'icon' => 'heroicon-o-clock',
+        // $jadwalAudit = Menu::create([
+        //     'nama_menu' => 'Jadwal Audit',
+        //     'route' => 'jadwal-audit.index',
+        //     'icon' => 'heroicon-o-clock',
+        // ]);
+
+        $plotingAMI = Menu::create([
+            'nama_menu' => 'Ploting AMI',
+            'route' => 'ploting-ami.index',
+            'icon' => 'heroicon-o-user-plus',
         ]);
 
         $daftarTilik = Menu::create([
             'nama_menu' => 'Daftar Tilik',
             'route' => 'daftar-tilik.index',
             'icon' => 'heroicon-o-check-circle',
-        ]);
-
-        $assesmenLapangan = Menu::create([
-            'nama_menu' => 'Assesmen Lapangan',
-            'route' => 'assesmen-lapangan.index',
-            'icon' => 'heroicon-o-map',
         ]);
 
         $dataUnit = Menu::create([
@@ -61,6 +61,48 @@ class MenuSeeder extends Seeder
             'nama_menu' => 'Data User',
             'route' => 'data-user.index',
             'icon' => 'heroicon-o-users',
+        ]);
+
+        $assesmenLapangan = Menu::create([
+            'nama_menu' => 'Assesmen Lapangan',
+            'route' => 'assesmen-lapangan.index',
+            'icon' => 'heroicon-o-map',
+        ]);
+
+        $pengisianFormAMI = Menu::create([
+            'nama_menu' => 'Pengisian Form AMI',
+            'route' => 'pengisian-form-ami.index',
+            'icon' => 'heroicon-o-document-text',
+        ]);
+
+        $tindakLanjutPerbaikan = Menu::create([
+            'nama_menu' => 'Tindak Lanjut Perbaikan',
+            'route' => 'tindak-lanjut-perbaikan.index',
+            'icon' => 'heroicon-o-check-circle',
+        ]);
+
+        $riwayatAudit = Menu::create([
+            'nama_menu' => 'Riwayat Audit',
+            'route' => 'riwayat-audit.index',
+            'icon' => 'heroicon-o-clock',
+        ]);
+
+        $rapatTinjauanManajemen = Menu::create([
+            'nama_menu' => 'Rapat Tinjauan Manajemen',
+            'route' => 'rapat-tinjauan-manajemen.index',
+            'icon' => 'heroicon-o-users',
+        ]);
+
+        $reviewTemuanAudit = Menu::create([
+            'nama_menu' => 'Review Temuan Audit',
+            'route' => 'review-temuan-audit.index',
+            'icon' => 'heroicon-o-document-text',
+        ]);
+
+        $dokumenAudit = Menu::create([
+            'nama_menu' => 'Dokumen Audit',
+            'route' => 'dokumen-audit.index',
+            'icon' => 'heroicon-o-document-text',
         ]);
 
          $ptpp = Menu::create([
