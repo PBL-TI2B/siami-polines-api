@@ -9,23 +9,50 @@ class ResponseTilikController extends Controller
 {
     public function index()
     {
-        return ResponseTilik::all();
+        $responseTilik = ResponseTilik::all();
+        return response()->json([
+            'success' => true,
+            'message' => 'List Data Response Tilik',
+            'data' => $responseTilik
+        ], 200);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'auditing_id' => 'required|numeric',
-            'tilik_id' => 'required|numeric',
-            'realisasi' => 'nullable|string',
-            'standar_nasional' => 'nullable|string',
-            'uraian_isian' => 'nullable|string',
-            'akar_penyebab' => 'nullable|string',
-            'rencana_perbaikan' => 'nullable|string',
+            'auditing_id' => 'required|exists:auditings,auditing_id',
+            'tilik_id' => 'required|exists:tilik,tilik_id',
+            'realisasi' => 'required|string',
+            'standar_nasional' => 'required|string',
+            'uraian_isian' => 'required|string',
+            'akar_penyebab_penunjang' => 'required|string',
+            'rencana_perbaikan_tindak_lanjut' => 'required|string',
         ]);
 
-        $responseTilik = ResponseTilik::create($request->all());
-        return response()->json($responseTilik, 201);
+        $responseTilik = new ResponseTilik();
+        $responseTilik->auditing_id = $request->auditing_id;
+        $responseTilik->tilik_id = $request->tilik_id;
+        $responseTilik->realisasi = $request->realisasi;
+        $responseTilik->standar_nasional = $request->standar_nasional;
+        $responseTilik->uraian_isian = $request->uraian_isian;
+        $responseTilik->akar_penyebab_penunjang = $request->akar_penyebab_penunjang;
+        $responseTilik->rencana_perbaikan_tindak_lanjut = $request->rencana_perbaikan_tindak_lanjut;
+        $responseTilik->save();
+
+        $responseTilik->load('auditing', 'tilik');
+
+        return response()->json([
+            'message' => 'Response Tilik berhasil ditambahkan.',
+            'data' => [
+                'auditing_id' => $responseTilik->auditing->auditing_id ?? null,
+                'tilik_id' => $responseTilik->tilik->tilik_id ?? null,
+                'realisasi' => $responseTilik->realisasi,
+                'standar_nasional' => $responseTilik->standar_nasional,
+                'uraian_isian' => $responseTilik->uraian_isian,
+                'akar_penyebab_penunjang' => $responseTilik->akar_penyebab_penunjang,
+                'rencana_perbaikan_tindak_lanjut' => $responseTilik->rencana_perbaikan_tindak_lanjut
+            ]
+        ], 201);
     }
 
     public function show($id)
@@ -34,12 +61,53 @@ class ResponseTilikController extends Controller
         return response()->json($responseTilik);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
-        $responseTilik = ResponseTilik::findOrFail($id);
+        // Cari data kriteria berdasarkan ID
+        $ResponseTilik = ResponseTilik::find($id);
 
-        $responseTilik->update($request->all());
-        return response()->json($responseTilik);
+        if (!$ResponseTilik) {
+            return response()->json([
+                'message' => 'Response Tilik tidak ditemukan.'
+            ], 404);
+        }
+
+        // Validasi input
+        $request->validate([
+            'auditing_id' => 'required|exists:auditings,auditing_id',
+            'tilik_id' => 'required|exists:tilik,tilik_id',
+            'realisasi' => 'required|string',
+            'standar_nasional' => 'required|string',
+            'uraian_isian' => 'required|string',
+            'akar_penyebab_penunjang' => 'required|string',
+            'rencana_perbaikan_tindak_lanjut' => 'required|string',
+        ]);
+
+        // Update data
+        $responseTilik = new ResponseTilik();
+        $responseTilik->auditing_id = $request->auditing_id;
+        $responseTilik->tilik_id = $request->tilik_id;
+        $responseTilik->realisasi = $request->realisasi;
+        $responseTilik->standar_nasional = $request->standar_nasional;
+        $responseTilik->uraian_isian = $request->uraian_isian;
+        $responseTilik->akar_penyebab_penunjang = $request->akar_penyebab_penunjang;
+        $responseTilik->rencana_perbaikan_tindak_lanjut = $request->rencana_perbaikan_tindak_lanjut;
+        $responseTilik->save();
+
+        $responseTilik->load('auditing', 'tilik');
+
+        return response()->json([
+            'message' => 'Response Tilik berhasil ditambahkan.',
+            'data' => [
+                'auditing_id' => $responseTilik->auditing->auditing_id ?? null,
+                'tilik_id' => $responseTilik->tilik->tilik_id ?? null,
+                'realisasi' => $responseTilik->realisasi,
+                'standar_nasional' => $responseTilik->standar_nasional,
+                'uraian_isian' => $responseTilik->uraian_isian,
+                'akar_penyebab_penunjang' => $responseTilik->akar_penyebab_penunjang,
+                'rencana_perbaikan_tindak_lanjut' => $responseTilik->rencana_perbaikan_tindak_lanjut
+            ]
+        ], 201);
     }
 
     public function destroy($id)

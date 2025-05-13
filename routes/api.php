@@ -156,6 +156,15 @@ Route::prefix('instrumen-response')->controller(InstrumenResponseController::cla
     Route::delete('/{id}', 'destroy'); // Delete by ID
 });
 
+// Route::apiResource('response-tilik', ResponseTilikController::class);
+Route::prefix('response-tilik')->controller(ResponseTilikController::class)->group(function () {
+    Route::get('/', 'index');          // GET /api/response-tilik
+    Route::post('/', 'store');         // POST /api/response-tilik
+    Route::get('/{id}', 'show');       // GET /api/response-tilik/{id}
+    Route::put('/{id}', 'update');     // PUT /api/response-tilik/{id}
+    Route::delete('/{id}', 'destroy'); // DELETE /api/response-tilik/{id}
+});
+
 // dibawah ini route gatauuu >_<
 
 // Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
@@ -163,7 +172,7 @@ Route::apiResource('data-instrumen', DataInstrumenUptController::class);
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});
-Route::apiResource('response-tilik', ResponseTilikController::class);
+//Route::apiResource('response-tilik', ResponseTilikController::class);
 
 Route::prefix('penjadwalan')->group(function(){
     Route::post('/', [PenjadwalanController::class, 'store']);

@@ -26,7 +26,7 @@ return new class extends Migration
             $table->unsignedBigInteger('tilik_id');
             $table->text('realisasi')->nullable();
             $table->text('standar_nasional')->nullable();
-            $table->text('uraian isian')->nullable();
+            $table->text('uraian_isian')->nullable();
             $table->text('akar_penyebab_penunjang')->nullable();
             $table->text('rencana_perbaikan_tindak_lanjut')->nullable();
 
