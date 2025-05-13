@@ -14,5 +14,9 @@ class SasaranStrategis extends Model
     protected $fillable = [
         'nama_sasaran',
     ];
+    public function indikatorKinerja()
+    {
+        return $this->hasMany(IndikatorKinerja::class, 'sasaran_strategis_id');
+    }
 }
 

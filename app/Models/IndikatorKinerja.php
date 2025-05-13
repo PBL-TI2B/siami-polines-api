@@ -19,5 +19,8 @@ class IndikatorKinerja extends Model
     {
         return $this->belongsTo(SasaranStrategis::class, 'sasaran_strategis_id', 'sasaran_strategis_id');
     }
-
+    public function aktivitas()
+    {
+        return $this->hasMany(Aktivitas::class, 'indikator_kinerja_id');
+    }
 }
