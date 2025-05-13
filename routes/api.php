@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\SidebarMenuController;
 use App\Http\Controllers\Api\SasaranStrategisController;
 use App\Http\Controllers\Api\IndikatorKinerjaController;
 use App\Http\Controllers\Api\AktivitasController;
+use App\Http\Controllers\Api\InstrumenResponseController;
+use App\Http\Controllers\Api\JenisUnitController;
 use App\Http\Controllers\Api\SetIntrumenController;
 
 //route autentikasi
@@ -146,6 +148,22 @@ Route::prefix('jenis-units')->controller(JenisUnitController::class)->group(func
     Route::delete('/{id}', 'destroy');  // Delete by ID
 });
 
+Route::prefix('instrumen-response')->controller(InstrumenResponseController::class)->group(function () {
+    Route::get('/', 'index');          // List semua
+    Route::post('/', 'store');         // Simpan baru
+    Route::get('/{id}', 'show');       // Detail by ID
+    Route::put('/{id}', 'update');     // Update by ID
+    Route::delete('/{id}', 'destroy'); // Delete by ID
+});
+
+// Route::apiResource('response-tilik', ResponseTilikController::class);
+Route::prefix('response-tilik')->controller(ResponseTilikController::class)->group(function () {
+    Route::get('/', 'index');          // GET /api/response-tilik
+    Route::post('/', 'store');         // POST /api/response-tilik
+    Route::get('/{id}', 'show');       // GET /api/response-tilik/{id}
+    Route::put('/{id}', 'update');     // PUT /api/response-tilik/{id}
+    Route::delete('/{id}', 'destroy'); // DELETE /api/response-tilik/{id}
+});
 
 // dibawah ini route gatauuu >_<
 
@@ -154,7 +172,7 @@ Route::apiResource('data-instrumen', DataInstrumenUptController::class);
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});
-Route::apiResource('response-tilik', ResponseTilikController::class);
+//Route::apiResource('response-tilik', ResponseTilikController::class);
 
 Route::prefix('penjadwalan')->group(function(){
     Route::post('/', [PenjadwalanController::class, 'store']);

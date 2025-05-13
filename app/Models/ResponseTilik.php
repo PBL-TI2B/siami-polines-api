@@ -11,7 +11,7 @@ class ResponseTilik extends Model
 
     protected $table = 'response_tilik';
     protected $primaryKey = 'response_tilik_id';
-
+    public $timestamps = false;
     protected $fillable = [
         'auditing_id',
         'tilik_id',
@@ -21,4 +21,14 @@ class ResponseTilik extends Model
         'akar_penyebab',
         'rencana_perbaikan',
     ];
+    public function auditing()
+    {
+        return $this->belongsTo(Auditing::class, 'auditing_id');
+    }
+
+    public function tilik()
+    {
+        return $this->belongsTo(Tilik::class, 'tilik_id');
+    }
+
 }
