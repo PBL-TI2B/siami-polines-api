@@ -23,7 +23,12 @@ use App\Http\Controllers\Api\SetIntrumenController;
 //route autentikasi
 // endpoint login (tidak butuh regist)
 Route::post('/login', [AuthController::class, 'login']);
+
+// Endpoint untuk mendapatkan menu sidebar
 Route::get('/sidebar-menu', [SidebarMenuController::class, 'getSidebarMenus']);
+Route::post('/sidebar-menu', [SidebarMenuController::class, 'createMenu']);
+Route::put('/sidebar-menu/{menuId}', [SidebarMenuController::class, 'updateMenu']);
+Route::delete('/sidebar-menu/{menuId}', [SidebarMenuController::class, 'deleteMenu']);
 
 // Group route yang butuh login (auth:sanctum)
 Route::middleware('auth:sanctum')->group(function () {

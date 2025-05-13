@@ -9,7 +9,7 @@ class RoleSubMenuAccess extends Model
     protected $table = 'role_sub_menu_access';
     protected $primaryKey = 'id';
     protected $fillable = ['role_id', 'sub_menu_id'];
-    public $timestamps = true;
+    public $timestamps = false;
 
     /**
      * Relasi: RoleSubMenuAccess milik Role

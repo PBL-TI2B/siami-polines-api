@@ -9,6 +9,7 @@ class RoleMenuAccess extends Model
     protected $table = 'role_menu_access';
     protected $primaryKey = 'role_menu_access_id';
     protected $fillable = ['role_id', 'menu_id'];
+    public $timestamps = false;
 
     // Relasi: RoleMenuAccess berelasi ke Role
     public function role()
