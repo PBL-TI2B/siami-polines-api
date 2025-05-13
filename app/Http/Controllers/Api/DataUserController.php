@@ -7,27 +7,27 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\JsonResponse;
 
 class DataUserController extends Controller
 {
     /**
      * Display a listing of the users with their role and unitKerja.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
         try {
             $users = User::with(['role', 'unitKerja'])->get();
             return response()->json([
                 'status' => 'success',
-                'message' => 'Users retrieved successfully',
+                'message' => 'Data user berhasil diambil',
                 'data' => $users
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to retrieve users',
+                'message' => 'Terjadi kesalahan saat mengambil data',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -35,14 +35,11 @@ class DataUserController extends Controller
 
     /**
      * Store a newly created user in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $validated = Validator::make($request->all(), [
                 'role_id' => 'required|integer|exists:roles,role_id',
                 'unit_kerja_id' => 'required|integer|exists:unit_kerja,unit_kerja_id',
                 'email' => 'required|email|unique:users,email',
@@ -51,11 +48,11 @@ class DataUserController extends Controller
                 'nip' => 'required|string|unique:users,nip'
             ]);
 
-            if ($validator->fails()) {
+            if ($validated->fails()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
+                    'message' => 'Validasi gagal',
+                    'errors' => $validated->errors()
                 ], 422);
             }
 
@@ -72,13 +69,13 @@ class DataUserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'User created successfully',
+                'message' => 'User berhasil dibuat',
                 'data' => $user
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to create user',
+                'message' => 'Gagal membuat user',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -86,30 +83,28 @@ class DataUserController extends Controller
 
     /**
      * Display the specified user with their role and unitKerja.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function show($id)
+    public function show($id): JsonResponse
     {
         try {
             $user = User::with(['role', 'unitKerja'])->find($id);
+
             if (!$user) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'User not found'
+                    'message' => 'User tidak ditemukan'
                 ], 404);
             }
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'User retrieved successfully',
+                'message' => 'Data user berhasil diambil',
                 'data' => $user
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to retrieve user',
+                'message' => 'Terjadi kesalahan saat mengambil data',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -117,23 +112,20 @@ class DataUserController extends Controller
 
     /**
      * Update the specified user in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
         try {
             $user = User::find($id);
+
             if (!$user) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'User not found'
+                    'message' => 'User tidak ditemukan'
                 ], 404);
             }
 
-            $validator = Validator::make($request->all(), [
+            $validated = Validator::make($request->all(), [
                 'role_id' => 'required|integer|exists:roles,role_id',
                 'unit_kerja_id' => 'required|integer|exists:unit_kerja,unit_kerja_id',
                 'email' => 'required|email|unique:users,email,'.$id.',user_id',
@@ -142,11 +134,11 @@ class DataUserController extends Controller
                 'nip' => 'required|string|unique:users,nip,'.$id.',user_id'
             ]);
 
-            if ($validator->fails()) {
+            if ($validated->fails()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
+                    'message' => 'Validasi gagal',
+                    'errors' => $validated->errors()
                 ], 422);
             }
 
@@ -163,13 +155,13 @@ class DataUserController extends Controller
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'User updated successfully',
+                'message' => 'User berhasil diperbarui',
                 'data' => $user
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to update user',
+                'message' => 'Gagal memperbarui user',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -177,18 +169,16 @@ class DataUserController extends Controller
 
     /**
      * Remove the specified user from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         try {
             $user = User::find($id);
+
             if (!$user) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'User not found'
+                    'message' => 'User tidak ditemukan'
                 ], 404);
             }
 
@@ -198,42 +188,70 @@ class DataUserController extends Controller
                 $user->auditee2Auditings()->exists()) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Cannot delete user, associated with auditing records'
+                    'message' => 'Tidak dapat menghapus user yang terlibat dalam audit'
                 ], 422);
+            }
+
+            if ($user->photo) {
+                Storage::disk('public')->delete($user->photo);
             }
 
             $user->delete();
 
             return response()->json([
                 'status' => 'success',
-                'message' => 'User deleted successfully'
+                'message' => 'User berhasil dihapus'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to delete user',
+                'message' => 'Gagal menghapus user',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function bulkDelete(Request $request)
+    /**
+     * Bulk delete users.
+     */
+    public function bulkDelete(Request $request): JsonResponse
     {
-        $ids = $request->input('selected_users', []);
+        try {
+            $ids = $request->input('selected_users', []);
 
-        \Log::info('Bulk destroy IDs: ', $ids);
+            if (empty($ids)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Tidak ada user yang dipilih'
+                ], 422);
+            }
 
-        if (!empty($ids)) {
-            $users = User::whereIn('id', $ids)->get();
+            $users = User::whereIn('user_id', $ids)->get();
+
             foreach ($users as $user) {
+                if ($user->auditor1Auditings()->exists() ||
+                    $user->auditor2Auditings()->exists() ||
+                    $user->auditee1Auditings()->exists() ||
+                    $user->auditee2Auditings()->exists()) {
+                    continue; // Skip users involved in audits
+                }
+
                 if ($user->photo) {
                     Storage::disk('public')->delete($user->photo);
                 }
                 $user->delete();
             }
-            return redirect()->route('data-user.index')->with('success', 'Users berhasil dihapus');
-        }
 
-        return redirect()->route('data-user.index')->with('error', 'Tidak ada user yang dipilih.');
+            return response()->json([
+                'status' => 'success',
+                'message' => 'User yang dipilih berhasil dihapus'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal menghapus user',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

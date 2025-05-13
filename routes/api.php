@@ -138,6 +138,15 @@ Route::prefix('data-user')->controller(DataUserController::class)->group(functio
     Route::delete('/bulk-destroy', 'bulkDelete'); // Bulk delete users
 });
 
+Route::prefix('jenis-units')->controller(JenisUnitController::class)->group(function () {
+    Route::get('/', 'index');           // List semua
+    Route::post('/', 'store');          // Simpan baru
+    Route::get('/{id}', 'show');        // Detail by ID
+    Route::put('/{id}', 'update');      // Update by ID
+    Route::delete('/{id}', 'destroy');  // Delete by ID
+});
+
+
 // dibawah ini route gatauuu >_<
 
 // Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
