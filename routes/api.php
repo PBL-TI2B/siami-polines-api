@@ -18,6 +18,8 @@ use App\Http\Controllers\Api\SidebarMenuController;
 use App\Http\Controllers\Api\SasaranStrategisController;
 use App\Http\Controllers\Api\IndikatorKinerjaController;
 use App\Http\Controllers\Api\AktivitasController;
+use App\Http\Controllers\Api\InstrumenResponseController;
+use App\Http\Controllers\Api\JenisUnitController;
 use App\Http\Controllers\Api\SetIntrumenController;
 
 //route autentikasi
@@ -146,6 +148,13 @@ Route::prefix('jenis-units')->controller(JenisUnitController::class)->group(func
     Route::delete('/{id}', 'destroy');  // Delete by ID
 });
 
+Route::prefix('instrumen-response')->controller(InstrumenResponseController::class)->group(function () {
+    Route::get('/', 'index');          // List semua
+    Route::post('/', 'store');         // Simpan baru
+    Route::get('/{id}', 'show');       // Detail by ID
+    Route::put('/{id}', 'update');     // Update by ID
+    Route::delete('/{id}', 'destroy'); // Delete by ID
+});
 
 // dibawah ini route gatauuu >_<
 
