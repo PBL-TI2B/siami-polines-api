@@ -15,7 +15,9 @@ class PeriodeAuditController extends Controller
 
         $periodeAudits = PeriodeAudit::query()
             ->when($search, fn($q) => $q->where('nama_periode', 'like', "%{$search}%"))
-            ->with('auditings') // sesuaikan jika ada relasi
+            ->with('auditings')
+            ->orderByRaw("FIELD(status, 'Sedang Berjalan') DESC")
+            ->orderByDesc('tanggal_mulai')
             ->paginate($perPage);
 
         return response()->json([
