@@ -10,9 +10,4 @@ class JenisUnit extends Model
     protected $primaryKey = 'jenis_unit_id';
     protected $fillable = ['nama_jenis_unit'];
     public $timestamps = false; // Sesuaikan dengan kebutuhan
-
-    public function unitKerjas()
-    {
-        return $this->hasMany(UnitKerja::class, 'jenis_unit_id', 'jenis_unit_id');
-    }
 }
