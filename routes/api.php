@@ -186,6 +186,7 @@ Route::prefix('penjadwalan')->group(function(){
 Route::prefix('set-instrumen')->group(function(){
     Route::post('/', [SetIntrumenController::class, 'store']);
     Route::get('/', [SetIntrumenController::class, 'readAll']);
+    Route::get('/{id}', [SetIntrumenController::class, 'show']);
     Route::put('/{id}', [SetIntrumenController::class, 'update']);
     Route::delete('/{id}', [SetIntrumenController::class, 'destroy']);
 });

@@ -19,14 +19,14 @@ class SetInstrumen extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'unit_kerja_id',
+        'jenis_unit_id',
         'aktivitas_id',
         'unsur_id',
     ];
 
-    public function unitKerja()
+    public function jenisunit()
     {
-        return $this->belongsTo(UnitKerja::class, 'unit_kerja_id');
+        return $this->belongsTo(JenisUnit::class, 'jenis_unit_id');
     }
 
     public function aktivitas()
