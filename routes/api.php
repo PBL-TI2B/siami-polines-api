@@ -21,6 +21,7 @@ use App\Http\Controllers\Api\AktivitasController;
 use App\Http\Controllers\Api\InstrumenResponseController;
 use App\Http\Controllers\Api\JenisUnitController;
 use App\Http\Controllers\Api\SetIntrumenController;
+use App\Http\Controllers\Api\ResponseController;
 
 //route autentikasi
 // endpoint login (tidak butuh regist)
@@ -169,6 +170,7 @@ Route::prefix('response-tilik')->controller(ResponseTilikController::class)->gro
 
 // Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
 Route::apiResource('data-instrumen', DataInstrumenUptController::class);
+Route::apiResource('responses',ResponseController::class);
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});
@@ -184,6 +186,7 @@ Route::prefix('penjadwalan')->group(function(){
 Route::prefix('set-instrumen')->group(function(){
     Route::post('/', [SetIntrumenController::class, 'store']);
     Route::get('/', [SetIntrumenController::class, 'readAll']);
+    Route::get('/{id}', [SetIntrumenController::class, 'show']);
     Route::put('/{id}', [SetIntrumenController::class, 'update']);
     Route::delete('/{id}', [SetIntrumenController::class, 'destroy']);
 });

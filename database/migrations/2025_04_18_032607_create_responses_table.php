@@ -15,14 +15,20 @@ return new class extends Migration
             $table->id('response_id');
             $table->unsignedBigInteger('auditing_id');
             $table->unsignedBigInteger('set_instrumen_unit_kerja_id');
-            $table->unsignedBigInteger('unit_kerja_id');
-            $table->unsignedBigInteger('user_id');
-
+            $table->char('ketersediaan_standar_dan_dokumen', 100)->nullable();
+            $table->enum('spt_pt', ['0','1'])->nullable();
+            $table->enum('sn_dikti', ['0','1'])->nullable();
+            $table->enum('lokal',['0','1'])->nullable();
+            $table->enum('nasional', ['0','1'])->nullable();
+            $table->enum('internasional', ['0','1'])->nullable();
+            $table->char('capaian', 100)->nullable();
+            $table->char('sesuai', 100)->nullable();
+            $table->char('lokasi_bukti_dukung', 100)->nullable();
+            $table->enum('minor', ['0','1'])->nullable();
+            $table->enum('mayor', ['0','1'])->nullable();
+            $table->enum('ofi', ['0','1'] )->nullable();
             
-            $table->foreign('auditing_id')->references('auditing_id')->on('auditings')->onDelete('cascade');
             $table->foreign('set_instrumen_unit_kerja_id')->references('set_instrumen_unit_kerja_id')->on('set_instrumen')->onDelete('cascade');
-            $table->foreign('unit_kerja_id')->references('unit_kerja_id')->on('unit_kerja')->onDelete('cascade');
-            $table->foreign('user_id')->references('user_id')->on('users')->onDelete('cascade');
         });
     }
 
