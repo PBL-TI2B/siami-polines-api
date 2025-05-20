@@ -16,10 +16,15 @@ class Tilik extends Model
     public $timestamps = false; // karena tidak ada created_at dan updated_at
 
     protected $fillable = [
+        'kriteria_id',
         'pertanyaan',
         'indikator',
         'sumber_data',
         'metode_perhitungan',
         'target'
     ];
+    public function kriteria()
+    {
+        return $this->belongsTo(Kriteria::class, 'kriteria_id');
+    }
 }

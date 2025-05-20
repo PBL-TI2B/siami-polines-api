@@ -13,11 +13,14 @@ return new class extends Migration
     {
         Schema::create('tilik', function (Blueprint $table) {
             $table->id('tilik_id');
+            $table->unsignedBigInteger('kriteria_id');
             $table->text('pertanyaan');
             $table->text('indikator');
             $table->char('sumber_data', 100)->nullable();
             $table->char('metode_perhitungan', 100)->nullable();
             $table->char('target', 100)->nullable;
+            
+            $table->foreign('kriteria_id')->references('kriteria_id')->on('kriteria')->onDelete('cascade');
         });
 
         Schema::create('response_tilik', function (Blueprint $table) {
