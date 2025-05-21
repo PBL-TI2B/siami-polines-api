@@ -101,7 +101,7 @@ class SetIntrumenController extends Controller
     public function readAll() {
         $setInstrumen = SetInstrumen::with([
             'jenisunit',
-            'aktivitas',
+            'aktivitas.indikatorKinerja.sasaranStrategis',
             'unsur.deskripsi.kriteria' // include relasi berantai agar eager loading optimal
         ])->get();
 
@@ -117,7 +117,7 @@ class SetIntrumenController extends Controller
             Log::info("Fetching SetInstrumen with set_instrumen_unit_kerja_id: {$id}");
 
             // Mengambil SetInstrumen dengan relasi menggunakan eager loading
-            $setInstrumen = SetInstrumen::with(['jenisunit', 'aktivitas', 'unsur.deskripsi.kriteria'])
+            $setInstrumen = SetInstrumen::with(['jenisunit', 'aktivitas.indikatorKinerja.sasaranStrategis', 'unsur.deskripsi.kriteria'])
                 ->findOrFail($id);
 
             return response()->json([

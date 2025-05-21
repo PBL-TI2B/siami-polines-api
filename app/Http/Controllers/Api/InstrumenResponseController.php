@@ -27,6 +27,7 @@ class InstrumenResponseController extends Controller
             'setInstrumenUnitKerja',
             'auditing.auditee1.role',
             'auditing.auditee1.unitkerja',
+            'setInstrumenUnitKerja.aktivitas.indikatorKinerja.sasaranStrategis',
             'setInstrumenUnitKerja.unsur.deskripsi.kriteria' // include relasi berantai agar eager loading optimal
         ])->get();
 

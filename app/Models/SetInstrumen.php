@@ -34,6 +34,17 @@ class SetInstrumen extends Model
         return $this->belongsTo(Aktivitas::class, 'aktivitas_id');
     }
 
+     public function getIndikatorAttribute()
+    {
+        return $this->aktivitas ? $this->aktivitas->indikator_kinerja : null;
+    }
+
+    public function getSasaranAttribute()
+    {
+        return $this->aktivitas && $this->aktivitas->indikator_kinerja
+            ? $this->aktivitas->indikator_kinerja->sasaran_strategis
+            : null;
+    }
     public function unsur()
     {
         return $this->belongsTo(Unsur::class, 'unsur_id');
