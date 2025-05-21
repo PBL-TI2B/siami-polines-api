@@ -17,7 +17,7 @@ class RoleSeeder extends Seeder
             ['role_id' => 2, 'nama_role' => 'Auditor', 'prefix' => 'auditor'],
             ['role_id' => 3, 'nama_role' => 'Auditee', 'prefix' => 'auditee'],
             ['role_id' => 4, 'nama_role' => 'Kepala PMPP', 'prefix' => 'kepala-pmpp'],
-            ['role_id' => 5, 'nama_role' => 'Admin UPT', 'prefix' => 'admin-upt'],
+            ['role_id' => 5, 'nama_role' => 'Admin Unit', 'prefix' => 'admin-unit'],
         ]);
     }
 }

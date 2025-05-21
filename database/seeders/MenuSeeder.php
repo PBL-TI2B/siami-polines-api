@@ -69,9 +69,9 @@ class MenuSeeder extends Seeder
             'icon' => 'heroicon-o-map',
         ]);
 
-        $pengisianFormAMI = Menu::create([
-            'nama_menu' => 'Pengisian Form AMI',
-            'route' => 'pengisian-form-ami.index',
+        $pengisianInstrumen = Menu::create([
+            'nama_menu' => 'Pengisian Instrumen',
+            'route' => 'pengisian-instrumen.index',
             'icon' => 'heroicon-o-document-text',
         ]);
 
