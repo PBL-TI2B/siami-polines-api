@@ -4,7 +4,15 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\InstrumenResponse; 
+use App\Models\InstrumenResponse;
+use App\Models\SetInstrumen;
+use App\Models\Auditing; 
+use App\Models\User; 
+use App\Models\Role;
+use App\Models\UnitKerja; 
+use App\Models\Unsur; 
+use App\Models\Kriteria; 
+use App\Models\Deskripsi; 
 
 class InstrumenResponseController extends Controller
 {
@@ -13,11 +21,18 @@ class InstrumenResponseController extends Controller
      */
     public function index()
     {
-        $InstrumenResponse = InstrumenResponse::all();
+        $InstrumenResponse = InstrumenResponse::with([
+            'auditing',
+            'response',
+            'setInstrumenUnitKerja',
+            'auditing.auditee1.role',
+            'auditing.auditee1.unitkerja',
+            'setInstrumenUnitKerja.unsur.deskripsi.kriteria' // include relasi berantai agar eager loading optimal
+        ])->get();
+
         return response()->json([
-            'success' => true,
-            'message' => 'List Data Instrumen Response',
-            'data' => $InstrumenResponse
+            'message' => 'Data Instrumen Response berhasil ditampilkan',
+            'data' => $InstrumenResponse,
         ], 200);
     }
 

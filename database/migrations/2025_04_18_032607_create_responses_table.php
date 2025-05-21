@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('responses', function (Blueprint $table) {
             $table->id('response_id');
             $table->unsignedBigInteger('auditing_id');
-            $table->unsignedBigInteger('set_instrumen_unit_kerja_id');
+            // $table->unsignedBigInteger('set_instrumen_unit_kerja_id');
             $table->char('ketersediaan_standar_dan_dokumen', 100)->nullable();
             $table->enum('spt_pt', ['0','1'])->nullable();
             $table->enum('sn_dikti', ['0','1'])->nullable();
@@ -28,7 +28,8 @@ return new class extends Migration
             $table->enum('mayor', ['0','1'])->nullable();
             $table->enum('ofi', ['0','1'] )->nullable();
             
-            $table->foreign('set_instrumen_unit_kerja_id')->references('set_instrumen_unit_kerja_id')->on('set_instrumen')->onDelete('cascade');
+            $table->foreign('auditing_id')->references('auditing_id')->on('auditings')->onDelete('cascade');
+            // $table->foreign('set_instrumen_unit_kerja_id')->references('set_instrumen_unit_kerja_id')->on('set_instrumen')->onDelete('cascade');
         });
     }
 

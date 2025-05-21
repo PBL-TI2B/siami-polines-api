@@ -32,10 +32,42 @@ class InstrumenResponse extends Model
     {
         return $this->belongsTo(SetInstrumen::class, 'set_instrumen_unit_kerja_id');
     }
-
-    // public function response()
-    // {
-    //     return $this->belongsTo(Response::class, 'response_id');
-    // }
-    
+    public function response()
+    {
+        return $this->belongsTo(Response::class, 'response_id');
+    }
+    public function getUserAttribute()
+    {
+        return $this->auditing ? $this->auditing->auditee1 : null;
+    }
+    public function getUserRoleAttribute()
+    {
+        return $this->auditing && $this->auditing->auditee1
+            ? $this->auditing->auditee1->role
+            : null;
+    }
+    public function getUserUnitKerjaAttribute()
+    {
+        return $this->auditing && $this->auditing->auditee1
+            ? $this->auditing->auditee1->unitKerja
+            : null;
+    }
+    public function getJenisUnitAttribute()
+    {
+        return $this->setInstrumenUnitKerja ? $this->setInstrumenUnitKerja->jenisunit : null;
+    }
+    public function getUnsurAttribute()
+    {
+        return $this->setInstrumenUnitKerja ? $this->setInstrumenUnitKerja->unsur : null;
+    }
+    public function getDeskripsiAttribute()
+    {
+        return $this->setInstrumenUnitKerja && $this->setInstrumenUnitKerja->unsur
+            ? $this->setInstrumenUnitKerja->unsur->deskripsi
+            : null;
+    }
+    public function getKriteriaAttribute()
+    {
+        return optional($this->setInstrumenUnitKerja?->unsur?->deskripsi)->kriteria;
+    }
 }
