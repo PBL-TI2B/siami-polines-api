@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             KriteriaSeeder::class,
             UserSeeder::class,
             // RoleMenuSeeder::class,
+            DeskripsiSeeder::class,
             RoleMenuAccessSeeder::class,
             RoleSubMenuAccessSeeder::class,
         ]);
