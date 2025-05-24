@@ -70,8 +70,6 @@ class AuditingController extends Controller
             'user_id_1_auditee' => 'required|integer',
             'user_id_2_auditee' => 'nullable|integer',
             'unit_kerja_id' => 'required|integer',
-            'periode_id' => 'required|integer',
-            'status' => 'required|string|max:100',
         ]);
 
         if ($validator->fails()) {
