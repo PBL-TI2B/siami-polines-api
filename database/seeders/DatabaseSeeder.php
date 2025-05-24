@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SetInstrumen;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -23,6 +24,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             // RoleMenuSeeder::class,
             DeskripsiSeeder::class,
+            UnsurSeeder::class,
+            SetInstrumenSeeder::class,
             RoleMenuAccessSeeder::class,
             RoleSubMenuAccessSeeder::class,
         ]);
