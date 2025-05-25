@@ -23,6 +23,7 @@ class AuditingController extends Controller
             'user_id_2_auditee' => 'nullable|integer',
             'unit_kerja_id' => 'required|integer',
             'periode_id' => 'required|integer',
+            'jadwal_audit' => 'nullable|date',
             'status' => 'required|string|max:100',
         ]);
 
@@ -39,6 +40,7 @@ class AuditingController extends Controller
             'user_id_2_auditee' => $request->user_id_2_auditee,
             'unit_kerja_id' => $request->unit_kerja_id,
             'periode_id' => $request->periode_id,
+            'jadwal_audit' => $request->jadwal_audit,
             'status' => $request->status,
         ]);
 
