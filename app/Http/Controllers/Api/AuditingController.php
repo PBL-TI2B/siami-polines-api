@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Auditing;
+use App\Models\User;
 
 class AuditingController extends Controller
 {
@@ -12,6 +13,30 @@ class AuditingController extends Controller
     {
         $auditings = Auditing::all();
         return response()->json($auditings);
+    }
+
+    public function getByUserLogin($userId)
+    {
+        $user = User::where('user_id', $userId)->first();
+        if (!$user) {
+            return response()->json([
+                'message' => 'User tidak ditemukan',
+                'data' => [],
+            ], 404);
+        }
+
+        $userID = $user->user_id;
+
+        $auditings = Auditing::with('auditor1', 'auditor2', 'auditee1', 'auditee2', 'unitKerja', 'periode')
+                ->where('user_id_1_auditor', $userID)
+                ->orWhere('user_id_2_auditor', $userID)
+                ->orWhere('user_id_1_auditee', $userID)
+                ->orWhere('user_id_2_auditee', $userID)->get();
+
+        return response()->json([
+            'message' => 'Data Auditing per user berhasil diambil',
+            'data' => $auditings,
+        ], 200);
     }
 
     public function store(Request $request)
