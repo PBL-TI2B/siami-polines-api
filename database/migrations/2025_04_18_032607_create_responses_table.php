@@ -27,6 +27,7 @@ return new class extends Migration
             $table->enum('minor', ['0','1'])->nullable();
             $table->enum('mayor', ['0','1'])->nullable();
             $table->enum('ofi', ['0','1'] )->nullable();
+            $table->text('keterangan')->nullable();
             
             $table->foreign('auditing_id')->references('auditing_id')->on('auditings')->onDelete('cascade');
             // $table->foreign('set_instrumen_unit_kerja_id')->references('set_instrumen_unit_kerja_id')->on('set_instrumen')->onDelete('cascade');
