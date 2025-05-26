@@ -63,8 +63,21 @@ class UserSeeder extends Seeder
             'password' => Hash::make('auditee123458'), // menggunakan hash
             'nama' => 'auditee2',
             'nip' => '1234567896', // pastikan unik
-            ]
-
+            ],
+            ['role_id' => 2,
+            'unit_kerja_id' => 1,
+            'email' => 'auditor1@gmail.com',
+            'password' => Hash::make('auditor123457'), // menggunakan hash
+            'nama' => 'auditor 1',
+            'nip' => '1234567897', // pastikan unik
+            ],
+            ['role_id' => 2,
+            'unit_kerja_id' => 1,
+            'email' => 'auditor2@gmail.com',
+            'password' => Hash::make('auditor123458'), // menggunakan hash
+            'nama' => 'auditor 2',
+            'nip' => '1234567898', // pastikan unik
+            ],
         ]);
 
     }
