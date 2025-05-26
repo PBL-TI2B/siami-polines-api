@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('unit_kerja_id');
             $table->unsignedBigInteger('periode_id');
             $table->date('jadwal_audit')->nullable();
-            $table->char('status',100);
+            $table->integer('status');
 
             $table->foreign('user_id_1_auditor')->references('user_id')->on('users')->onDelete('cascade');
             $table->foreign('user_id_2_auditor')->references('user_id')->on('users')->onDelete('cascade');
