@@ -172,6 +172,7 @@ Route::prefix('response-tilik')->controller(ResponseTilikController::class)->gro
 // Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
 Route::apiResource('data-instrumen', DataInstrumenUptController::class);
 Route::apiResource('responses',ResponseController::class);
+Route::get('/responses/auditing/{auditing_id}', [ResponseController::class, 'getByAuditingId']);
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});
