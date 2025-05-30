@@ -46,7 +46,8 @@ class ResponseController extends Controller
             'lokasi_bukti_dukung' => 'nullable|string',
             'minor' => 'nullable|integer',
             'mayor' => 'nullable|integer',
-            'ofi' => 'nullable|integer'
+            'ofi' => 'nullable|integer',
+            'keterangan' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -111,7 +112,8 @@ class ResponseController extends Controller
             'lokasi_bukti_dukung' => 'nullable|string',
             'minor' => 'nullable|integer',
             'mayor' => 'nullable|integer',
-            'ofi' => 'nullable|integer'
+            'ofi' => 'nullable|integer',
+            'keterangan' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {

@@ -27,11 +27,11 @@ class MenuSeeder extends Seeder
             'icon' => 'heroicon-o-calendar-days',
         ]);
 
-        // $jadwalAudit = Menu::create([
-        //     'nama_menu' => 'Jadwal Audit',
-        //     'route' => 'jadwal-audit.index',
-        //     'icon' => 'heroicon-o-clock',
-        // ]);
+        $audit = Menu::create([
+            'nama_menu' => 'Audit',
+            'route' => 'audit.index',
+            'icon' => 'heroicon-o-clock',
+        ]);
 
         $plotingAMI = Menu::create([
             'nama_menu' => 'Ploting AMI',

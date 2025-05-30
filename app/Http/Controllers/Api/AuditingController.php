@@ -92,11 +92,12 @@ class AuditingController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'user_id_1_auditor' => 'required|integer',
+            'user_id_1_auditor' => 'nullable|integer',
             'user_id_2_auditor' => 'nullable|integer',
-            'user_id_1_auditee' => 'required|integer',
+            'user_id_1_auditee' => 'nullable|integer',
             'user_id_2_auditee' => 'nullable|integer',
-            'unit_kerja_id' => 'required|integer',
+            'unit_kerja_id' => 'nullable|integer',
+            'status' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
