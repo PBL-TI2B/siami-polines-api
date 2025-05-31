@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedBigInteger('indikator_kinerja_id');
             $table->char('nama_aktivitas', 200);
             $table->char('satuan', 100);
-            $table->integer('target');
+            $table->char('target',100);
 
             //foreign key
             $table->foreign('indikator_kinerja_id')->references('indikator_kinerja_id')->on('indikator_kinerja')->onDelete('cascade');

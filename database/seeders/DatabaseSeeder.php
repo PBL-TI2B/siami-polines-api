@@ -27,11 +27,12 @@ class DatabaseSeeder extends Seeder
             // RoleMenuSeeder::class,
             DeskripsiSeeder::class,
             UnsurSeeder::class,
-            SetInstrumenSeeder::class,
             RoleMenuAccessSeeder::class,
             RoleSubMenuAccessSeeder::class,
-            AktivitasSeeder::class,
             SasaranStrategisSeeder::class,
+            IndikatorKinerjaSeeder::class,
+            AktivitasSeeder::class,
+            SetInstrumenSeeder::class,
         ]);
     }
 }
