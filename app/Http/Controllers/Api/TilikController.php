@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Tilik;
-use Illuminate\Http\Request;
+use App\Models\Tilik; // Pastikan Model Tilik Anda sudah benar
+use Illuminate\Http\Request; // Penting: tambahkan ini untuk mengambil request
 use Illuminate\Support\Facades\Validator;
 use Exception;
 
@@ -13,21 +13,39 @@ class TilikController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param  \Illuminate\Http\Request  $request // Tambahkan Request $request di sini
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request) // Tambahkan Request $request di sini
     {
         try {
-            $tilik = Tilik::all();
+            // 1. Dapatkan parameter 'page' dan 'per_page' dari request
+            // Nilai default: page=1, per_page=5 (sesuai dengan select option pertama di frontend Anda)
+            $perPage = $request->input('per_page', 5); // Ambil 'per_page', default 5
+            $page = $request->input('page', 1);       // Ambil 'page', default 1
+
+            // 2. Lakukan query ke database dengan paginasi menggunakan Eloquent
+            $tilikPaginated = Tilik::paginate($perPage, ['*'], 'page', $page);
+
+            // 3. Kembalikan response dalam format JSON yang sesuai dengan ekspektasi frontend
             return response()->json([
                 'success' => true,
                 'message' => 'List Data Tilik',
-                'data' => $tilik
+                'data'    => $tilikPaginated->items(), // Kirim item data dari paginator
+                'total'   => $tilikPaginated->total(), // Total semua item (untuk paginasi di frontend)
+                'per_page' => $tilikPaginated->perPage(),
+                'current_page' => $tilikPaginated->currentPage(),
+                'last_page' => $tilikPaginated->lastPage(),
+                // Anda bisa menambahkan metadata paginasi lain jika perlu
+                // 'from' => $tilikPaginated->firstItem(),
+                // 'to' => $tilikPaginated->lastItem(),
             ], 200);
+
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat mengambil data: ' . $e->getMessage(),
+                // 'data' => null // Sebaiknya tambahkan ini jika frontend mengharapkannya saat error
             ], 500);
         }
     }
