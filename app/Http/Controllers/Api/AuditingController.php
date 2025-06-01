@@ -97,6 +97,7 @@ class AuditingController extends Controller
             'user_id_1_auditee' => 'nullable|integer',
             'user_id_2_auditee' => 'nullable|integer',
             'unit_kerja_id' => 'nullable|integer',
+            'jadwal_audit' => 'nullable|date',
             'status' => 'nullable|integer',
         ]);
 
