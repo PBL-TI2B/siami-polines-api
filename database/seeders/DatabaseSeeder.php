@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Aktivitas;
+use App\Models\SasaranStrategis;
+use App\Models\SetInstrumen;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -22,8 +25,14 @@ class DatabaseSeeder extends Seeder
             KriteriaSeeder::class,
             UserSeeder::class,
             // RoleMenuSeeder::class,
+            DeskripsiSeeder::class,
+            UnsurSeeder::class,
             RoleMenuAccessSeeder::class,
             RoleSubMenuAccessSeeder::class,
+            SasaranStrategisSeeder::class,
+            IndikatorKinerjaSeeder::class,
+            AktivitasSeeder::class,
+            SetInstrumenSeeder::class,
         ]);
     }
 }

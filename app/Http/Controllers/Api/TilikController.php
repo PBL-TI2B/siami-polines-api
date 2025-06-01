@@ -11,7 +11,7 @@ use Exception;
 class TilikController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource
      *
      * @param  \Illuminate\Http\Request  $request // Tambahkan Request $request di sini
      * @return \Illuminate\Http\JsonResponse

@@ -9,7 +9,13 @@ class ResponseTilikController extends Controller
 {
     public function index()
     {
-        $responseTilik = ResponseTilik::all();
+        $responseTilik = ResponseTilik::with([
+            'auditing',
+            'tilik',
+            'tilik.kriteria',
+            'auditing.auditee1.role',
+            'auditing.auditee1.unitkerja'
+        ])->get();
         return response()->json([
             'success' => true,
             'message' => 'List Data Response Tilik',
@@ -63,10 +69,9 @@ class ResponseTilikController extends Controller
 
     public function update(Request $request, string $id)
     {
-        // Cari data kriteria berdasarkan ID
-        $ResponseTilik = ResponseTilik::find($id);
+        $responseTilik = ResponseTilik::find($id);
 
-        if (!$ResponseTilik) {
+        if (!$responseTilik) {
             return response()->json([
                 'message' => 'Response Tilik tidak ditemukan.'
             ], 404);
@@ -83,8 +88,7 @@ class ResponseTilikController extends Controller
             'rencana_perbaikan_tindak_lanjut' => 'required|string',
         ]);
 
-        // Update data
-        $responseTilik = new ResponseTilik();
+        // Update data yang sudah ada
         $responseTilik->auditing_id = $request->auditing_id;
         $responseTilik->tilik_id = $request->tilik_id;
         $responseTilik->realisasi = $request->realisasi;
@@ -97,7 +101,8 @@ class ResponseTilikController extends Controller
         $responseTilik->load('auditing', 'tilik');
 
         return response()->json([
-            'message' => 'Response Tilik berhasil ditambahkan.',
+            'success' => true,
+            'message' => 'Response Tilik berhasil diperbarui.',
             'data' => [
                 'auditing_id' => $responseTilik->auditing->auditing_id ?? null,
                 'tilik_id' => $responseTilik->tilik->tilik_id ?? null,
@@ -107,7 +112,7 @@ class ResponseTilikController extends Controller
                 'akar_penyebab_penunjang' => $responseTilik->akar_penyebab_penunjang,
                 'rencana_perbaikan_tindak_lanjut' => $responseTilik->rencana_perbaikan_tindak_lanjut
             ]
-        ], 201);
+        ], 200);
     }
 
     public function destroy($id)
@@ -115,6 +120,9 @@ class ResponseTilikController extends Controller
         $responseTilik = ResponseTilik::findOrFail($id);
         $responseTilik->delete();
 
-        return response()->json(['message' => 'Deleted successfully']);
+        return response()->json([
+            'success' => true,
+            'message' => 'Jawaban berhasil dihapus'
+        ]);
     }
 }

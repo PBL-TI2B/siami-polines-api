@@ -27,7 +27,8 @@ class Response extends Model
         'lokasi_bukti_dukung',
         'minor',
         'mayor',
-        'ofi'   
+        'ofi',
+        'keterangan' 
     ];
 
     public function auditing()

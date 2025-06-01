@@ -9,7 +9,7 @@ use Exception;
 
 class ResponseController extends Controller
 {
-    
+
     public function index()
     {
         try {
@@ -46,7 +46,8 @@ class ResponseController extends Controller
             'lokasi_bukti_dukung' => 'nullable|string',
             'minor' => 'nullable|integer',
             'mayor' => 'nullable|integer',
-            'ofi' => 'nullable|integer'
+            'ofi' => 'nullable|integer',
+            'keterangan' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -111,7 +112,8 @@ class ResponseController extends Controller
             'lokasi_bukti_dukung' => 'nullable|string',
             'minor' => 'nullable|integer',
             'mayor' => 'nullable|integer',
-            'ofi' => 'nullable|integer'
+            'ofi' => 'nullable|integer',
+            'keterangan' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
@@ -154,6 +156,36 @@ class ResponseController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete response: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Retrieve responses by auditing ID.
+     */
+    public function getByAuditingId($auditing_id)
+    {
+        try {
+            $responses = Response::with(['auditing', 'setInstrumen'])
+                ->where('auditing_id', $auditing_id)
+                ->get();
+
+            if ($responses->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No responses found for the given auditing ID'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Responses retrieved successfully',
+                'data' => $responses
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve responses: ' . $e->getMessage()
             ], 500);
         }
     }

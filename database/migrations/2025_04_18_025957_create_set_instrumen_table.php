@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('set_instrumen', function (Blueprint $table) {
             $table->id('set_instrumen_unit_kerja_id');
             $table->unsignedBigInteger('jenis_unit_id');
-            $table->unsignedBigInteger('aktivitas_id')->nullable;
-            $table->unsignedBigInteger('unsur_id')->nullable;
+            $table->unsignedBigInteger('aktivitas_id')->nullable();
+            $table->unsignedBigInteger('unsur_id')->nullable();
 
             $table->foreign('jenis_unit_id')->references('jenis_unit_id')->on('jenis_units')->onDelete('cascade');
             $table->foreign('aktivitas_id')->references('aktivitas_id')->on('aktivitas')->onDelete('cascade');

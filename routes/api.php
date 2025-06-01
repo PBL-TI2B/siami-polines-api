@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // route auditing -> tabel auditing
 Route::prefix('auditings')->group(function () {
     Route::get('/', [AuditingController::class, 'index']);           // Menampilkan semua data auditing
+    Route::get('/userID={userId}', [AuditingController::class, 'getByUserLogin']);
     Route::post('/', [AuditingController::class, 'store']);          // Menyimpan data auditing baru
     Route::get('{id}', [AuditingController::class, 'show']);         // Menampilkan detail auditing berdasarkan ID
     Route::put('{id}', [AuditingController::class, 'update']);       // Mengupdate data auditing
@@ -171,6 +172,7 @@ Route::prefix('response-tilik')->controller(ResponseTilikController::class)->gro
 // Route::post('/sasaran-strategis', [SasaranStrategisController::class, 'store']);
 Route::apiResource('data-instrumen', DataInstrumenUptController::class);
 Route::apiResource('responses',ResponseController::class);
+Route::get('/responses/auditing/{auditing_id}', [ResponseController::class, 'getByAuditingId']);
 //Route::middleware(['auth:api', 'can:manage-users'])->group(function () {
     //Route::apiResource('users', DataUserController::class);
 //});

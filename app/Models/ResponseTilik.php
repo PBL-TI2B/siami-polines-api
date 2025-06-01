@@ -30,5 +30,24 @@ class ResponseTilik extends Model
     {
         return $this->belongsTo(Tilik::class, 'tilik_id');
     }
-
+    public function getUserAttribute()
+    {
+        return $this->auditing ? $this->auditing->auditee1 : null;
+    }
+    public function getUserRoleAttribute()
+    {
+        return $this->auditing && $this->auditing->auditee1
+            ? $this->auditing->auditee1->role
+            : null;
+    }
+    public function getUserUnitKerjaAttribute()
+    {
+        return $this->auditing && $this->auditing->auditee1
+            ? $this->auditing->auditee1->unitKerja
+            : null;
+    }
+    public function getKriteriaAttribute()
+    {
+        return $this->tilik ? $this->tilik->kriteria : null;
+    }
 }
