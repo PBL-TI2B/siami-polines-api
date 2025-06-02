@@ -27,19 +27,19 @@ class RoleMenuAccessSeeder extends Seeder
 
             // Auditor (role_id: 2) - Akses menu audit
             ['role_id' => 2, 'menu_id' => $menus['Dashboard']->menu_id],
+            ['role_id' => 2, 'menu_id' => $menus['Audit']->menu_id],
             // ['role_id' => 2, 'menu_id' => $menus['Daftar Tilik']->menu_id],
-            ['role_id' => 2, 'menu_id' => $menus['Data Instrumen']->menu_id],
-            ['role_id' => 2, 'menu_id' => $menus['Assesmen Lapangan']->menu_id],
+            // ['role_id' => 2, 'menu_id' => $menus['Assesmen Lapangan']->menu_id],
             // ['role_id' => 2, 'menu_id' => $menus['Laporan']->menu_id],
-            ['role_id' => 2, 'menu_id' => $menus['PTPP']->menu_id],
+            // ['role_id' => 2, 'menu_id' => $menus['PTPP']->menu_id],
 
 
             // Auditee (role_id: 3) - Akses menu audit
             ['role_id' => 3, 'menu_id' => $menus['Dashboard']->menu_id],
             ['role_id' => 3, 'menu_id' => $menus['Audit']->menu_id],
-            ['role_id' => 3, 'menu_id' => $menus['Pengisian Instrumen']->menu_id],
-            ['role_id' => 3, 'menu_id' => $menus['Tindak Lanjut Perbaikan']->menu_id],
-            ['role_id' => 3, 'menu_id' => $menus['Riwayat Audit']->menu_id],
+            // ['role_id' => 3, 'menu_id' => $menus['Pengisian Instrumen']->menu_id],
+            // ['role_id' => 3, 'menu_id' => $menus['Tindak Lanjut Perbaikan']->menu_id],
+            // ['role_id' => 3, 'menu_id' => $menus['Riwayat Audit']->menu_id],
 
             // Kepala PMPP (role_id: 4) - Akses menu audit
             ['role_id' => 4, 'menu_id' => $menus['Dashboard']->menu_id],

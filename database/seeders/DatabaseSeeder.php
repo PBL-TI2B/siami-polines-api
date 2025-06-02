@@ -24,7 +24,6 @@ class DatabaseSeeder extends Seeder
             PeriodeAuditSeeder::class,
             KriteriaSeeder::class,
             UserSeeder::class,
-            // RoleMenuSeeder::class,
             DeskripsiSeeder::class,
             UnsurSeeder::class,
             RoleMenuAccessSeeder::class,

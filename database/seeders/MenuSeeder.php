@@ -30,7 +30,7 @@ class MenuSeeder extends Seeder
         $audit = Menu::create([
             'nama_menu' => 'Audit',
             'route' => 'audit.index',
-            'icon' => 'heroicon-o-clock',
+            'icon' => 'heroicon-o-document-text',
         ]);
 
         $plotingAMI = Menu::create([
@@ -69,11 +69,6 @@ class MenuSeeder extends Seeder
             'icon' => 'heroicon-o-map',
         ]);
 
-        $pengisianInstrumen = Menu::create([
-            'nama_menu' => 'Pengisian Instrumen',
-            'route' => 'pengisian-instrumen.index',
-            'icon' => 'heroicon-o-document-text',
-        ]);
 
         $tindakLanjutPerbaikan = Menu::create([
             'nama_menu' => 'Tindak Lanjut Perbaikan',
@@ -105,7 +100,7 @@ class MenuSeeder extends Seeder
             'icon' => 'heroicon-o-document-text',
         ]);
 
-         $ptpp = Menu::create([
+        $ptpp = Menu::create([
             'nama_menu' => 'PTPP',
             'route' => 'ptpp.index',
             'icon' => 'heroicon-o-document-check',
