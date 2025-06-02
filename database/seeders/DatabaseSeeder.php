@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             IndikatorKinerjaSeeder::class,
             AktivitasSeeder::class,
             SetInstrumenSeeder::class,
+            DaftarTilikSeeder::class,
         ]);
     }
 }

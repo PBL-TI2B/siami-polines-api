@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id('tilik_id');
             $table->unsignedBigInteger('kriteria_id');
             $table->text('pertanyaan');
-            $table->text('indikator');
-            $table->char('sumber_data', 100)->nullable();
-            $table->char('metode_perhitungan', 100)->nullable();
-            $table->char('target', 100)->nullable;
+            $table->text('indikator')->nullable();
+            $table->char('sumber_data', 255)->nullable();
+            $table->char('metode_perhitungan', 255)->nullable();
+            $table->char('target', 255)->nullable();
             
             $table->foreign('kriteria_id')->references('kriteria_id')->on('kriteria')->onDelete('cascade');
         });
