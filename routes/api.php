@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\InstrumenResponseController;
 use App\Http\Controllers\Api\JenisUnitController;
 use App\Http\Controllers\Api\SetIntrumenController;
 use App\Http\Controllers\Api\ResponseController;
+use App\Http\Controllers\Api\LaporanPtppController;
 
 //route autentikasi
 // endpoint login (tidak butuh regist)
@@ -192,3 +193,12 @@ Route::prefix('set-instrumen')->group(function(){
     Route::put('/{id}', [SetIntrumenController::class, 'update']);
     Route::delete('/{id}', [SetIntrumenController::class, 'destroy']);
 });
+
+Route::prefix('laporan-ptpp')->group(function () {
+    Route::get('/', [LaporanPtppController::class, 'index']);
+    Route::post('/', [LaporanPtppController::class, 'store']);
+    Route::get('/{id}', [LaporanPtppController::class, 'show']);
+    Route::put('/{id}', [LaporanPtppController::class, 'update']);
+    Route::delete('/{id}', [LaporanPtppController::class, 'destroy']);
+});
+
