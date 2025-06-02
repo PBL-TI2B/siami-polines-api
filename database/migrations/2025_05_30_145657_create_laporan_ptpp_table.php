@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('laporan_ptpp', function (Blueprint $table) {
             $table->id(); // Kolom ID otomatis (primary key)
-            $table->string('standar'); // Kolom untuk standar 
+            $table->string('standar'); // Kolom untuk standar
             $table->text('uraian_temuan'); // Kolom untuk uraian temuan (teks panjang)
             $table->enum('kategori_temuan', ['NC', 'AOC', 'OFI']); // Kolom enum untuk kategori temuan
             $table->text('saran_perbaikan')->nullable(); // Kolom untuk saran perbaikan, boleh kosong
-            $table->string('status'); // Kolom untuk status
         });
     }
 
