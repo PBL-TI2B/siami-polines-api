@@ -17,6 +17,5 @@ class LaporanPtpp extends Model
         'uraian_temuan',
         'kategori_temuan',
         'saran_perbaikan',
-        'status',
     ];
 }

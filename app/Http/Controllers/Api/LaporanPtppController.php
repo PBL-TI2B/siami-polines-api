@@ -39,7 +39,6 @@ class LaporanPtppController extends Controller
             'uraian_temuan' => 'required|string',
             'kategori_temuan' => 'required|in:NC,AOC,OFI',
             'saran_perbaikan' => 'nullable|string',
-            'status' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -111,7 +110,6 @@ class LaporanPtppController extends Controller
             'uraian_temuan' => 'sometimes|string',
             'kategori_temuan' => 'sometimes|in:NC,AOC,OFI',
             'saran_perbaikan' => 'nullable|string',
-            'status' => 'sometimes|string|max:255',
         ]);
 
         if ($validator->fails()) {
