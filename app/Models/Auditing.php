@@ -51,6 +51,10 @@ class Auditing extends Model
     {
         return $this->belongsTo(UnitKerja::class, 'unit_kerja_id', 'unit_kerja_id');
     }
+    public function getNamaUnitKerjaAttribute()
+{
+    return $this->unitKerja ? $this->unitKerja->nama_unit_kerja : null;
+}
 
     // Relasi: Auditing berelasi ke PeriodeAudit
     public function periode()

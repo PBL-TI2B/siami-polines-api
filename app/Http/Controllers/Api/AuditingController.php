@@ -11,7 +11,14 @@ class AuditingController extends Controller
 {
     public function index()
     {
-        $auditings = Auditing::all();
+        $auditings = Auditing::with([
+        'auditor1',
+        'auditor2',
+        'auditee1',
+        'auditee2',
+        'unitKerja',
+        'periode',
+        ])->get();
         return response()->json($auditings);
     }
 
