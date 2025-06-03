@@ -166,6 +166,7 @@ Route::prefix('response-tilik')->controller(ResponseTilikController::class)->gro
     Route::get('/{id}', 'show');       // GET /api/response-tilik/{id}
     Route::put('/{id}', 'update');     // PUT /api/response-tilik/{id}
     Route::delete('/{id}', 'destroy'); // DELETE /api/response-tilik/{id}
+    Route::get('/auditing/{auditing_id}', [ResponseTilikController::class, 'getByAuditingId']);
 });
 
 // dibawah ini route gatauuu >_<

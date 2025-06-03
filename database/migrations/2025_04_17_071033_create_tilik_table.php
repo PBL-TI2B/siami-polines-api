@@ -22,20 +22,6 @@ return new class extends Migration
             
             $table->foreign('kriteria_id')->references('kriteria_id')->on('kriteria')->onDelete('cascade');
         });
-
-        Schema::create('response_tilik', function (Blueprint $table) {
-            $table->id('response_tilik_id');
-            $table->unsignedBigInteger('auditing_id');
-            $table->unsignedBigInteger('tilik_id');
-            $table->text('realisasi')->nullable();
-            $table->text('standar_nasional')->nullable();
-            $table->text('uraian_isian')->nullable();
-            $table->text('akar_penyebab_penunjang')->nullable();
-            $table->text('rencana_perbaikan_tindak_lanjut')->nullable();
-
-            $table->foreign('auditing_id')->references('auditing_id')->on('auditings')->onDelete('cascade');
-            $table->foreign('tilik_id')->references('tilik_id')->on('tilik')->onDelete('cascade');
-        });
     }
 
     /**
@@ -43,7 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('response_tilik');
         Schema::dropIfExists('tilik');
     }
 };

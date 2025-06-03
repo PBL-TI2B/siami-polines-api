@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\ResponseTilik;
 use Illuminate\Http\Request;
+use Exception;
 
 class ResponseTilikController extends Controller
 {
@@ -124,5 +125,32 @@ class ResponseTilikController extends Controller
             'success' => true,
             'message' => 'Jawaban berhasil dihapus'
         ]);
+    }
+
+    public function getByAuditingId($auditing_id)
+    {
+        try {
+            $responseTilik = ResponseTilik::with(['auditing', 'tilik'])
+                ->where('auditing_id', $auditing_id)
+                ->get();
+
+            if ($responseTilik->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No response tilik found for the given auditing ID'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Response tilik retrieved successfully',
+                'data' => $responseTilik
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve response tilik: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }
