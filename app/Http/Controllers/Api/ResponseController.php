@@ -100,20 +100,9 @@ class ResponseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'auditing_id' => 'required|exists:auditings,auditing_id',
-            'set_instrumen_unit_kerja_id' => 'required|exists:set_instrumen,set_instrumen_unit_kerja_id',
-            'ketersediaan_standar_dan_dokumen' => 'nullable|string',
-            'spt_pt' => 'nullable|string',
-            'sn_dikti' => 'nullable|string',
-            'lokal' => 'nullable|string',
-            'nasional' => 'nullable|string',
-            'internasional' => 'nullable|string',
-            'capaian' => 'nullable|string',
-            'sesuai' => 'nullable|string',
-            'lokasi_bukti_dukung' => 'nullable|string',
             'minor' => 'nullable|integer',
             'mayor' => 'nullable|integer',
             'ofi' => 'nullable|integer',
-            'keterangan' => 'nullable|string'
         ]);
 
         if ($validator->fails()) {
