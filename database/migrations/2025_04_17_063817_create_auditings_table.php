@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id_1_auditor');
             $table->unsignedBigInteger('user_id_2_auditor');
             $table->unsignedBigInteger('user_id_1_auditee');
-            $table->unsignedBigInteger('user_id_2_auditee');
+            $table->unsignedBigInteger('user_id_2_auditee')->nullable();
             $table->unsignedBigInteger('unit_kerja_id');
             $table->unsignedBigInteger('periode_id');
             $table->date('jadwal_audit')->nullable();
