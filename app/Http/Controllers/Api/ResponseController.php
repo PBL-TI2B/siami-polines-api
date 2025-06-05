@@ -43,7 +43,7 @@ class ResponseController extends Controller
             'internasional' => 'nullable|string',
             'capaian' => 'nullable|string',
             'sesuai' => 'nullable|string',
-            'lokasi_bukti_dukung' => 'nullable|string',
+            'lokasi_bukti_dukung' => 'nullable|string|max:255',
             'minor' => 'nullable|integer',
             'mayor' => 'nullable|integer',
             'ofi' => 'nullable|integer',
