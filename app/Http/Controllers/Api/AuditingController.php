@@ -117,6 +117,7 @@ class AuditingController extends Controller
         $auditing->update($request->all());
 
         return response()->json([
+            'success' => true,
             'message' => 'Data auditing berhasil diperbarui.',
             'data' => $auditing
         ]);
