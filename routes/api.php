@@ -104,6 +104,7 @@ Route::prefix('unsur')->controller(UnsurController::class)->group(function () {
 //route tilik -> tabel tilik
 Route::prefix('tilik')->controller(TilikController::class)->group(function () {
     Route::get('/', 'index');          // List semua
+    Route::get('/all', 'indexall');          // List semua
     Route::post('/', 'store');         // Simpan baru
     Route::get('/{id}', 'show');       // Detail by ID
     Route::put('/{id}', 'update');     // Update by ID

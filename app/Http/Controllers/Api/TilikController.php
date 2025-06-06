@@ -16,6 +16,16 @@ class TilikController extends Controller
      * @param  \Illuminate\Http\Request  $request // Tambahkan Request $request di sini
      * @return \Illuminate\Http\JsonResponse
      */
+    public function indexall()
+    {
+        $tilik = Tilik::with('kriteria')->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'List Data Response Tilik',
+            'data' => $tilik
+        ], 200);
+    }
+
     public function index(Request $request) // Tambahkan Request $request di sini
     {
         try {
