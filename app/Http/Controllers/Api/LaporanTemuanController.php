@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\LaporanPtpp;
+use App\Models\LaporanTemuan;
 
-class LaporanPtppController extends Controller
+class LaporanTemuanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $laporan = LaporanPtpp::all();
+        $laporan = LaporanTemuan::all();
         return response()->json([
             'status' => 'success',
             'data' => $laporan
@@ -48,7 +48,7 @@ class LaporanPtppController extends Controller
             ], 422);
         }
 
-        $laporan = LaporanPtpp::create($request->all());
+        $laporan = LaporanTemuan::create($request->all());
         return response()->json([
             'status' => 'success',
             'data' => $laporan
@@ -61,7 +61,7 @@ class LaporanPtppController extends Controller
      */
     public function show ($id)
     {
-        $laporan = LaporanPtpp::find($id);
+        $laporan = LaporanTemuan::find($id);
         if (!$laporan) {
             return response()->json([
                 'status' => 'error',
@@ -79,7 +79,7 @@ class LaporanPtppController extends Controller
      */
     public function edit(string $id)
     {
-        $laporan = LaporanPtpp::find($id);
+        $laporan = LaporanTemuan::find($id);
         if (!$laporan) {
             return response()->json([
                 'status' => 'error',
@@ -97,7 +97,7 @@ class LaporanPtppController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $laporan = LaporanPtpp::find($id);
+        $laporan = LaporanTemuan::find($id);
         if (!$laporan) {
             return response()->json([
                 'status' => 'error',
@@ -131,7 +131,7 @@ class LaporanPtppController extends Controller
      */
     public function destroy($id)
     {
-        $laporan = LaporanPtpp::find($id);
+        $laporan = LaporanTemuan::find($id);
         if (!$laporan) {
             return response()->json([
                 'status' => 'error',

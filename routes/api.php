@@ -22,7 +22,7 @@ use App\Http\Controllers\Api\InstrumenResponseController;
 use App\Http\Controllers\Api\JenisUnitController;
 use App\Http\Controllers\Api\SetIntrumenController;
 use App\Http\Controllers\Api\ResponseController;
-use App\Http\Controllers\Api\LaporanPtppController;
+use App\Http\Controllers\Api\laporanTemuanController;
 
 //route autentikasi
 // endpoint login (tidak butuh regist)
@@ -196,11 +196,11 @@ Route::prefix('set-instrumen')->group(function(){
     Route::delete('/{id}', [SetIntrumenController::class, 'destroy']);
 });
 
-Route::prefix('laporan-ptpp')->group(function () {
-    Route::get('/', [LaporanPtppController::class, 'index']);
-    Route::post('/', [LaporanPtppController::class, 'store']);
-    Route::get('/{id}', [LaporanPtppController::class, 'show']);
-    Route::put('/{id}', [LaporanPtppController::class, 'update']);
-    Route::delete('/{id}', [LaporanPtppController::class, 'destroy']);
+Route::prefix('laporan-temuan')->group(function () {
+    Route::get('/', [LaporanTemuanController::class, 'index']);
+    Route::post('/', [LaporanTemuanController::class, 'store']);
+    Route::get('/{id}', [LaporanTemuanController::class, 'show']);
+    Route::put('/{id}', [LaporanTemuanController::class, 'update']);
+    Route::delete('/{id}', [LaporanTemuanController::class, 'destroy']);
 });
 
