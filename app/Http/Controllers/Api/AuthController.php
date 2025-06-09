@@ -169,7 +169,7 @@ class AuthController extends Controller
                 'role_id' => 'integer|exists:roles,role_id',
                 'unit_kerja_id' => 'integer|exists:unit_kerja,unit_kerja_id',
                 'email' => 'email|unique:users,email,' . $user->user_id . ',user_id',
-                'password' => 'min:6',
+                'password' => 'nullable|min:6',
                 'nama' => 'string|max:100',
                 'nip' => 'unique:users,nip,' . $user->user_id . ',user_id',
             ]);
