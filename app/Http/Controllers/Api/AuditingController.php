@@ -56,7 +56,8 @@ class AuditingController extends Controller
             'unit_kerja_id' => 'required|integer',
             'periode_id' => 'required|integer',
             'jadwal_audit' => 'nullable|date',
-            'status' => 'required|string|max:100',
+            'status' => 'required|integer|max:11',
+            'rtm' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -74,6 +75,7 @@ class AuditingController extends Controller
             'periode_id' => $request->periode_id,
             'jadwal_audit' => $request->jadwal_audit,
             'status' => $request->status,
+            'rtm' => $request->rtm,
         ]);
 
         return response()->json([
@@ -106,6 +108,7 @@ class AuditingController extends Controller
             'unit_kerja_id' => 'nullable|integer',
             'jadwal_audit' => 'nullable|date',
             'status' => 'nullable|integer',
+            'rtm' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
