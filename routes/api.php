@@ -140,6 +140,7 @@ Route::prefix('data-user')->controller(DataUserController::class)->group(functio
     Route::post('/', 'store');              // Create a new user
     Route::get('/{id}', 'show');            // Get by ID
     Route::put('/{id}', 'update');          // Update by ID
+    Route::put('/{userID}/change-password', 'editPass'); // Change password by ID
     Route::delete('/{id}', 'destroy');      // Delete by ID
     Route::delete('/bulk-destroy', 'bulkDelete'); // Bulk delete users
 });

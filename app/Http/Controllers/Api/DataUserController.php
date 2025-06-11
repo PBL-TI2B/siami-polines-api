@@ -254,4 +254,51 @@ class DataUserController extends Controller
             ], 500);
         }
     }
+
+    public function editPass(Request $request, $userID): JsonResponse {
+        try {
+            $validated = Validator::make($request->all(), [
+                'old_password' => 'required|string',
+                'new_password' => 'required|string|min:6|confirmed',
+            ]);
+
+            if ($validated->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Validasi gagal',
+                    'errors' => $validated->errors()
+                ], 422);
+            }
+
+            $user = User::find($userID);
+
+            if (!$user) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'User tidak ditemukan'
+                ], 404);
+            }
+
+            if (!Hash::check($request->old_password, $user->password)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Password lama salah'
+                ], 403);
+            }
+
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Password berhasil diubah'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal mengubah password',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
