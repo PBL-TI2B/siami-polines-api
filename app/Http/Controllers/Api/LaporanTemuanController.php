@@ -39,6 +39,7 @@ class LaporanTemuanController extends Controller
             'uraian_temuan' => 'required|string',
             'kategori_temuan' => 'required|in:NC,AOC,OFI',
             'saran_perbaikan' => 'nullable|string',
+            'auditing_id' => 'required|exists:auditings,auditing_id',
         ]);
 
         if ($validator->fails()) {
@@ -48,101 +49,102 @@ class LaporanTemuanController extends Controller
             ], 422);
         }
 
-        $laporan = LaporanTemuan::create($request->all());
+        $data = $request->only(['standar', 'uraian_temuan', 'kategori_temuan', 'saran_perbaikan', 'auditing_id']);
+        $laporan = LaporanTemuan::create($data);
+
         return response()->json([
             'status' => 'success',
             'data' => $laporan
         ], 201);
-
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show ($id)
+    public function show($id)
     {
-        $laporan = LaporanTemuan::find($id);
-        if (!$laporan) {
+        try {
+            $laporan = LaporanTemuan::find($id);
+            if (!$laporan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Laporan not found'
+                ], 404);
+            }
+            return response()->json([
+                'status' => 'success',
+                'data' => $laporan
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Laporan not found'
-            ], 404);
+                'message' => 'Failed to fetch laporan',
+                'error' => $e->getMessage()
+            ], 500);
         }
-        return response()->json([
-            'status' => 'success',
-            'data' => $laporan
-        ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        $laporan = LaporanTemuan::find($id);
-        if (!$laporan) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Laporan not found'
-            ], 404);
-        }
-        return response()->json([
-            'status' => 'success',
-            'data' => $laporan
-        ], 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
-        $laporan = LaporanTemuan::find($id);
-        if (!$laporan) {
+        try {
+            $laporan = LaporanTemuan::find($id);
+            if (!$laporan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Laporan not found'
+                ], 404);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'standar' => 'sometimes|string|max:255',
+                'uraian_temuan' => 'sometimes|string',
+                'kategori_temuan' => 'sometimes|in:NC,AOC,OFI',
+                'saran_perbaikan' => 'nullable|string',
+                'auditing_id' => 'sometimes|exists:auditings,auditing_id',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => 'error',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $data = $request->only(['standar', 'uraian_temuan', 'kategori_temuan', 'saran_perbaikan', 'auditing_id']);
+            $laporan->update($data);
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $laporan
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Laporan not found'
-            ], 404);
+                'message' => 'Failed to update laporan',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $validator = Validator::make($request->all(), [
-            'standar' => 'sometimes|string|max:255',
-            'uraian_temuan' => 'sometimes|string',
-            'kategori_temuan' => 'sometimes|in:NC,AOC,OFI',
-            'saran_perbaikan' => 'nullable|string',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $laporan->update($request->all());
-        return response()->json([
-            'status' => 'success',
-            'data' => $laporan
-        ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
-        $laporan = LaporanTemuan::find($id);
-        if (!$laporan) {
+        try {
+            $laporan = LaporanTemuan::find($id);
+            if (!$laporan) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Laporan not found'
+                ], 404);
+            }
+
+            $laporan->delete();
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Laporan deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Laporan not found'
-            ], 404);
+                'message' => 'Failed to delete laporan',
+                'error' => $e->getMessage()
+            ], 500);
         }
-
-        $laporan->delete();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Laporan deleted successfully'
-        ], 200);
     }
 }
