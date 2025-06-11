@@ -16,7 +16,7 @@ class KriteriaSeeder extends Seeder
     {
         DB::table('kriteria')->insert([
             ['nama_kriteria' => 'Visi, Misi, Tujuan, Strategi'],
-            ['nama_kriteria' => 'Tata kelola, Tata pamong, dan Kerjasama'],
+            ['nama_kriteria' => 'Tata kelola, Tata Pamong, dan Kerjasama'],
             ['nama_kriteria' => 'Mahasiswa'],
             ['nama_kriteria' => 'Sumber Daya Manusia'],
             ['nama_kriteria' => 'Keuangan, Sarana, dan Prasarana'],
