@@ -43,13 +43,13 @@ class RoleMenuAccessSeeder extends Seeder
 
             // Kepala PMPP (role_id: 4) - Akses menu audit
             ['role_id' => 4, 'menu_id' => $menus['Dashboard']->menu_id],
-            ['role_id' => 4, 'menu_id' => $menus['Rapat Tinjauan Manajemen']->menu_id],
+            // ['role_id' => 4, 'menu_id' => $menus['Rapat Tinjauan Manajemen']->menu_id],
             ['role_id' => 4, 'menu_id' => $menus['Ploting AMI']->menu_id],
             ['role_id' => 4, 'menu_id' => $menus['Daftar Tilik']->menu_id],
             ['role_id' => 4, 'menu_id' => $menus['Data Instrumen']->menu_id],
             // ['role_id' => 4, 'menu_id' => $menus['Review Temuan Audit']->menu_id],
             // ['role_id' => 4, 'menu_id' => $menus['Dokumen Audit']->menu_id],
-            ['role_id' => 4, 'menu_id' => $menus['PTPP']->menu_id],
+            // ['role_id' => 4, 'menu_id' => $menus['PTPP']->menu_id],
 
             // Admin UPT (role_id: 5) - Akses menu audit
             ['role_id' => 5, 'menu_id' => $menus['Dashboard']->menu_id],

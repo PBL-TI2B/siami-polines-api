@@ -15,6 +15,7 @@ class SetInstrumenSeeder extends Seeder
      */
     public function run(): void
     {DB::table('set_instrumen')->insert([
+
             ['jenis_unit_id' => 2, 'aktivitas_id' => 1 , 'unsur_id' => null],
             ['jenis_unit_id' => 2, 'aktivitas_id' => 2, 'unsur_id' => null],
             ['jenis_unit_id' => 2, 'aktivitas_id' => 3, 'unsur_id' => null],
@@ -88,8 +89,8 @@ class SetInstrumenSeeder extends Seeder
             ['jenis_unit_id' => 3, 'aktivitas_id' => null, 'unsur_id' => 52],
             ['jenis_unit_id' => 3, 'aktivitas_id' => null, 'unsur_id' => 53],
             ['jenis_unit_id' => 3, 'aktivitas_id' => null, 'unsur_id' => 54],
-           
+
         ]);
-        
+
     }
 }
