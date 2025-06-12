@@ -21,6 +21,7 @@ class Auditing extends Model
         'jadwal_audit',
         'status',
         'rtm',
+        'link',
     ];
 
     // Relasi: Auditing berelasi ke User sebagai auditor pertama

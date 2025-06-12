@@ -58,6 +58,7 @@ class AuditingController extends Controller
             'jadwal_audit' => 'nullable|date',
             'status' => 'required|integer|max:11',
             'rtm' => 'nullable|string',
+            'link' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -76,6 +77,7 @@ class AuditingController extends Controller
             'jadwal_audit' => $request->jadwal_audit,
             'status' => $request->status,
             'rtm' => $request->rtm,
+            'link' => $request->link,
         ]);
 
         return response()->json([

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('jadwal_audit')->nullable();
             $table->integer('status');
             $table->string('rtm')->nullable();
+            $table->string('link')->nullable();
 
             $table->foreign('user_id_1_auditor')->references('user_id')->on('users')->onDelete('cascade');
             $table->foreign('user_id_2_auditor')->references('user_id')->on('users')->onDelete('cascade');
