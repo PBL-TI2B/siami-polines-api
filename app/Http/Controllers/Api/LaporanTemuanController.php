@@ -1,150 +1,195 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\LaporanTemuan;
+use App\Models\Auditing;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\JsonResponse;
 
 class LaporanTemuanController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the laporan temuan.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $laporan = LaporanTemuan::all();
+        $laporanTemuans = LaporanTemuan::with('kriterias', 'auditing')->get();
         return response()->json([
-            'status' => 'success',
-            'data' => $laporan
+            'status' => true,
+            'data' => $laporanTemuans,
+            'message' => 'Daftar laporan temuan berhasil diambil',
         ], 200);
-
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created laporan temuan in storage.
      */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $validator = Validator::make($request->all(), [
-            'standar' => 'required|string|max:255',
-            'uraian_temuan' => 'required|string',
-            'kategori_temuan' => 'required|in:NC,AOC,OFI',
-            'saran_perbaikan' => 'nullable|string',
             'auditing_id' => 'required|exists:auditings,auditing_id',
+            'standar.kriteria_id' => 'required|array',
+            'standar.kriteria_id.*' => 'exists:kriterias,kriteria_id',
+            'standar.uraian_temuan' => 'required|array',
+            'standar.uraian_temuan.*' => 'string|max:1000',
+            'standar.kategori_temuan' => 'required|array',
+            'standar.kategori_temuan.*' => 'in:NC,AOC,OFI',
+            'standar.saran_perbaikan' => 'nullable|array',
+            'standar.saran_perbaikan.*' => 'string|max:1000',
+        ], [
+            'auditing_id.required' => 'ID auditing wajib diisi.',
+            'standar.kriteria_id.required' => 'Kriteria wajib dipilih.',
+            'standar.kriteria_id.*.exists' => 'Kriteria tidak valid.',
+            'standar.uraian_temuan.required' => 'Uraian temuan wajib diisi.',
+            'standar.uraian_temuan.*.max' => 'Uraian temuan maksimal 1000 karakter.',
+            'standar.kategori_temuan.required' => 'Kategori temuan wajib dipilih.',
+            'standar.kategori_temuan.*.in' => 'Kategori temuan harus salah satu dari NC, AOC, atau OFI.',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
+                'status' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors(),
             ], 422);
         }
 
-        $data = $request->only(['standar', 'uraian_temuan', 'kategori_temuan', 'saran_perbaikan', 'auditing_id']);
-        $laporan = LaporanTemuan::create($data);
+        $data = $request->only(['auditing_id']);
+        $standar = $request->input('standar');
+
+        $uraianTemuans = array_map(fn($item) => str_replace(',', ';', trim($item)), $standar['uraian_temuan']);
+        $kategoriTemuans = $standar['kategori_temuan'];
+        $saranPerbaikans = array_map(fn($item) => !empty($item) ? str_replace(',', ';', trim($item)) : '', $standar['saran_perbaikan'] ?? []);
+
+        DB::transaction(function () use ($data, $uraianTemuans, $kategoriTemuans, $saranPerbaikans, $standar) {
+            $laporan = LaporanTemuan::create([
+                'auditing_id' => $data['auditing_id'],
+                'uraian_temuan' => implode(',', $uraianTemuans),
+                'kategori_temuan' => implode(',', $kategoriTemuans),
+                'saran_perbaikan' => implode(',', $saranPerbaikans),
+            ]);
+
+            $laporan->kriterias()->sync($standar['kriteria_id']);
+        });
 
         return response()->json([
-            'status' => 'success',
-            'data' => $laporan
+            'status' => true,
+            'message' => 'Laporan temuan berhasil disimpan',
+            'data' => LaporanTemuan::with('kriterias', 'auditing')->find($laporan->laporan_temuan_id),
         ], 201);
     }
 
-    public function show($id)
+    /**
+     * Display the specified laporan temuan.
+     */
+    public function show($id): JsonResponse
     {
-        try {
-            $laporan = LaporanTemuan::find($id);
-            if (!$laporan) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Laporan not found'
-                ], 404);
-            }
+        $laporan = LaporanTemuan::with('kriterias', 'auditing')->find($id);
+
+        if (!$laporan) {
             return response()->json([
-                'status' => 'success',
-                'data' => $laporan
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to fetch laporan',
-                'error' => $e->getMessage()
-            ], 500);
+                'status' => false,
+                'message' => 'Laporan temuan tidak ditemukan',
+            ], 404);
         }
+
+        return response()->json([
+            'status' => true,
+            'data' => $laporan,
+            'message' => 'Detail laporan temuan berhasil diambil',
+        ], 200);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified laporan temuan in storage.
+     */
+    public function update(Request $request, $id): JsonResponse
     {
-        try {
-            $laporan = LaporanTemuan::find($id);
-            if (!$laporan) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Laporan not found'
-                ], 404);
-            }
+        $laporan = LaporanTemuan::find($id);
 
-            $validator = Validator::make($request->all(), [
-                'standar' => 'sometimes|string|max:255',
-                'uraian_temuan' => 'sometimes|string',
-                'kategori_temuan' => 'sometimes|in:NC,AOC,OFI',
-                'saran_perbaikan' => 'nullable|string',
-                'auditing_id' => 'sometimes|exists:auditings,auditing_id',
+        if (!$laporan) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Laporan temuan tidak ditemukan',
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'auditing_id' => 'required|exists:auditings,auditing_id',
+            'standar.kriteria_id' => 'required|array',
+            'standar.kriteria_id.*' => 'exists:kriterias,kriteria_id',
+            'standar.uraian_temuan' => 'required|array',
+            'standar.uraian_temuan.*' => 'string|max:1000',
+            'standar.kategori_temuan' => 'required|array',
+            'standar.kategori_temuan.*' => 'in:NC,AOC,OFI',
+            'standar.saran_perbaikan' => 'nullable|array',
+            'standar.saran_perbaikan.*' => 'string|max:1000',
+        ], [
+            'auditing_id.required' => 'ID auditing wajib diisi.',
+            'standar.kriteria_id.required' => 'Kriteria wajib dipilih.',
+            'standar.kriteria_id.*.exists' => 'Kriteria tidak valid.',
+            'standar.uraian_temuan.required' => 'Uraian temuan wajib diisi.',
+            'standar.uraian_temuan.*.max' => 'Uraian temuan maksimal 1000 karakter.',
+            'standar.kategori_temuan.required' => 'Kategori temuan wajib dipilih.',
+            'standar.kategori_temuan.*.in' => 'Kategori temuan harus salah satu dari NC, AOC, atau OFI.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $standar = $request->input('standar');
+
+        $uraianTemuans = array_map(fn($item) => str_replace(',', ';', trim($item)), $standar['uraian_temuan']);
+        $kategoriTemuans = $standar['kategori_temuan'];
+        $saranPerbaikans = array_map(fn($item) => !empty($item) ? str_replace(',', ';', trim($item)) : '', $standar['saran_perbaikan'] ?? []);
+
+        DB::transaction(function () use ($laporan, $uraianTemuans, $kategoriTemuans, $saranPerbaikans, $standar) {
+            $laporan->update([
+                'auditing_id' => $laporan->auditing_id,
+                'uraian_temuan' => implode(',', $uraianTemuans),
+                'kategori_temuan' => implode(',', $kategoriTemuans),
+                'saran_perbaikan' => implode(',', $saranPerbaikans),
             ]);
 
-            if ($validator->fails()) {
-                return response()->json([
-                    'status' => 'error',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
+            $laporan->kriterias()->sync($standar['kriteria_id']);
+        });
 
-            $data = $request->only(['standar', 'uraian_temuan', 'kategori_temuan', 'saran_perbaikan', 'auditing_id']);
-            $laporan->update($data);
-
-            return response()->json([
-                'status' => 'success',
-                'data' => $laporan
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to update laporan',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Laporan temuan berhasil diperbarui',
+            'data' => LaporanTemuan::with('kriterias', 'auditing')->find($laporan->laporan_temuan_id),
+        ], 200);
     }
 
-    public function destroy($id)
+    /**
+     * Remove the specified laporan temuan from storage.
+     */
+    public function destroy($id): JsonResponse
     {
-        try {
-            $laporan = LaporanTemuan::find($id);
-            if (!$laporan) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Laporan not found'
-                ], 404);
-            }
+        $laporan = LaporanTemuan::find($id);
 
-            $laporan->delete();
+        if (!$laporan) {
             return response()->json([
-                'status' => 'success',
-                'message' => 'Laporan deleted successfully'
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Failed to delete laporan',
-                'error' => $e->getMessage()
-            ], 500);
+                'status' => false,
+                'message' => 'Laporan temuan tidak ditemukan',
+            ], 404);
         }
+
+        $laporan->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Laporan temuan berhasil dihapus',
+        ], 200);
     }
 }
+
