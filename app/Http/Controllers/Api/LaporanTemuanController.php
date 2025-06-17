@@ -17,7 +17,7 @@ class LaporanTemuanController extends Controller
      */
     public function index(): JsonResponse
     {
-        $laporanTemuans = LaporanTemuan::with('kriterias', 'auditing')->get();
+        $laporanTemuans = LaporanTemuan::with('auditing')->get();
         return response()->json([
             'status' => true,
             'data' => $laporanTemuans,
