@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\LaporanTemuan;
 use App\Models\Auditing;
+use App\Models\Kriteria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +18,7 @@ class LaporanTemuanController extends Controller
      */
     public function index(): JsonResponse
     {
-        $laporanTemuans = LaporanTemuan::with('auditing')->get();
+        $laporanTemuans = LaporanTemuan::with('kriterias', 'auditing')->get();
         return response()->json([
             'status' => true,
             'data' => $laporanTemuans,
