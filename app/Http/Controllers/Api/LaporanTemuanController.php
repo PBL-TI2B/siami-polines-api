@@ -1,196 +1,267 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\LaporanTemuan;
-use App\Models\Auditing;
+use App\Models\Auditing; 
 use App\Models\Kriteria;
+use App\Models\LaporanTemuan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\JsonResponse;
 
 class LaporanTemuanController extends Controller
 {
     /**
-     * Display a listing of the laporan temuan.
+     * Display a listing of laporan temuan.
      */
-    public function index(): JsonResponse
+    public function index(Request $request)
     {
-        $laporanTemuans = LaporanTemuan::with('kriterias', 'auditing')->get();
-        return response()->json([
-            'status' => true,
-            'data' => $laporanTemuans,
-            'message' => 'Daftar laporan temuan berhasil diambil',
-        ], 200);
+        try {
+            $auditingId = $request->query('auditing_id');
+            $query = LaporanTemuan::with('kriteria'); // Eager load kriteria untuk nama_kriteria
+
+            if ($auditingId) {
+                $query->where('auditing_id', $auditingId);
+            }
+
+            $laporanTemuans = $query->get()->map(function ($laporan) {
+                return [
+                    'laporan_temuan_id' => $laporan->laporan_temuan_id,
+                    'auditing_id' => $laporan->auditing_id,
+                    'kriteria_id' => $laporan->kriteria_id,
+                    'nama_kriteria' => $laporan->kriteria->nama_kriteria ?? 'Tidak ada kriteria',
+                    'uraian_temuan' => $laporan->uraian_temuan,
+                    'kategori_temuan' => $laporan->kategori_temuan,
+                    'saran_perbaikan' => $laporan->saran_perbaikan,
+                ];
+            });
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Laporan temuan retrieved successfully.',
+                'data' => $laporanTemuans,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error fetching laporan temuan: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to retrieve laporan temuan.',
+            ], 500);
+        }
     }
 
     /**
-     * Store a newly created laporan temuan in storage.
+     * Store a new laporan temuan.
+     * This method correctly handles creating multiple findings in a single request.
      */
-    public function store(Request $request): JsonResponse
+    public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'auditing_id' => 'required|exists:auditings,auditing_id',
-            'standar.kriteria_id' => 'required|array',
-            'standar.kriteria_id.*' => 'exists:kriterias,kriteria_id',
-            'standar.uraian_temuan' => 'required|array',
-            'standar.uraian_temuan.*' => 'string|max:1000',
-            'standar.kategori_temuan' => 'required|array',
-            'standar.kategori_temuan.*' => 'in:NC,AOC,OFI',
-            'standar.saran_perbaikan' => 'nullable|array',
-            'standar.saran_perbaikan.*' => 'string|max:1000',
+            'findings' => 'required|array|min:1',
+            'findings.*.kriteria_id' => 'required|exists:kriteria,kriteria_id',
+            'findings.*.uraian_temuan' => 'required|string|max:1000',
+            'findings.*.kategori_temuan' => 'required|in:NC,AOC,OFI',
+            'findings.*.saran_perbaikan' => 'nullable|string|max:1000',
         ], [
-            'auditing_id.required' => 'ID auditing wajib diisi.',
-            'standar.kriteria_id.required' => 'Kriteria wajib dipilih.',
-            'standar.kriteria_id.*.exists' => 'Kriteria tidak valid.',
-            'standar.uraian_temuan.required' => 'Uraian temuan wajib diisi.',
-            'standar.uraian_temuan.*.max' => 'Uraian temuan maksimal 1000 karakter.',
-            'standar.kategori_temuan.required' => 'Kategori temuan wajib dipilih.',
-            'standar.kategori_temuan.*.in' => 'Kategori temuan harus salah satu dari NC, AOC, atau OFI.',
+            'auditing_id.required' => 'Audit ID is required.',
+            'auditing_id.exists' => 'Invalid audit ID.',
+            'findings.required' => 'At least one finding is required.',
+            'findings.*.kriteria_id.required' => 'Standard ID is required for each finding.',
+            'findings.*.kriteria_id.exists' => 'Invalid standard ID for finding.',
+            'findings.*.uraian_temuan.required' => 'Finding description is required.',
+            'findings.*.kategori_temuan.required' => 'Finding category is required.',
+            'findings.*.kategori_temuan.in' => 'Finding category must be NC, AOC, or OFI.',
         ]);
 
         if ($validator->fails()) {
+            Log::warning('Validation failed for storing laporan temuan: ' . json_encode($validator->errors()));
             return response()->json([
                 'status' => false,
-                'message' => 'Validasi gagal',
+                'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
             ], 422);
         }
 
-        $data = $request->only(['auditing_id']);
-        $standar = $request->input('standar');
+        try {
+            $createdFindings = [];
+            foreach ($request->findings as $finding) {
+                // Ensure the kriteria relationship is loaded after creation for 'nama_kriteria'
+                // This is generally handled by the next call or re-fetching if needed.
+                // For immediate response, you can explicitly load it or get the name.
+                $laporanTemuan = LaporanTemuan::create([
+                    'auditing_id' => $request->auditing_id,
+                    'kriteria_id' => $finding['kriteria_id'],
+                    'uraian_temuan' => $finding['uraian_temuan'],
+                    'kategori_temuan' => $finding['kategori_temuan'],
+                    'saran_perbaikan' => $finding['saran_perbaikan'] ?? null,
+                ]);
 
-        $uraianTemuans = array_map(fn($item) => str_replace(',', ';', trim($item)), $standar['uraian_temuan']);
-        $kategoriTemuans = $standar['kategori_temuan'];
-        $saranPerbaikans = array_map(fn($item) => !empty($item) ? str_replace(',', ';', trim($item)) : '', $standar['saran_perbaikan'] ?? []);
+                // To include nama_kriteria, we might need to eager load or find it
+                $kriteriaName = Kriteria::find($laporanTemuan->kriteria_id)->nama_kriteria ?? 'Tidak ada kriteria';
 
-        DB::transaction(function () use ($data, $uraianTemuans, $kategoriTemuans, $saranPerbaikans, $standar) {
-            $laporan = LaporanTemuan::create([
-                'auditing_id' => $data['auditing_id'],
-                'uraian_temuan' => implode(',', $uraianTemuans),
-                'kategori_temuan' => implode(',', $kategoriTemuans),
-                'saran_perbaikan' => implode(',', $saranPerbaikans),
-            ]);
+                $createdFindings[] = [
+                    'laporan_temuan_id' => $laporanTemuan->laporan_temuan_id,
+                    'auditing_id' => $laporanTemuan->auditing_id,
+                    'kriteria_id' => $laporanTemuan->kriteria_id,
+                    'nama_kriteria' => $kriteriaName, // Get kriteria name here
+                    'uraian_temuan' => $laporanTemuan->uraian_temuan,
+                    'kategori_temuan' => $laporanTemuan->kategori_temuan,
+                    'saran_perbaikan' => $laporanTemuan->saran_perbaikan,
+                ];
+            }
 
-            $laporan->kriterias()->sync($standar['kriteria_id']);
-        });
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Laporan temuan berhasil disimpan',
-            'data' => LaporanTemuan::with('kriterias', 'auditing')->find($laporan->laporan_temuan_id),
-        ], 201);
+            return response()->json([
+                'status' => true,
+                'message' => 'Laporan temuan created successfully.',
+                'data' => $createdFindings,
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Error storing laporan temuan: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to create laporan temuan.',
+            ], 500);
+        }
     }
 
     /**
      * Display the specified laporan temuan.
      */
-    public function show($id): JsonResponse
+    public function show($id)
     {
-        $laporan = LaporanTemuan::with('kriterias', 'auditing')->find($id);
-
-        if (!$laporan) {
+        try {
+            // Find by primaryKey 'laporan_temuan_id'
+            $laporanTemuan = LaporanTemuan::with('kriteria')->findOrFail($id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Laporan temuan retrieved successfully.',
+                'data' => [
+                    'laporan_temuan_id' => $laporanTemuan->laporan_temuan_id,
+                    'auditing_id' => $laporanTemuan->auditing_id,
+                    'kriteria_id' => $laporanTemuan->kriteria_id,
+                    'nama_kriteria' => $laporanTemuan->kriteria->nama_kriteria ?? 'Tidak ada kriteria',
+                    'uraian_temuan' => $laporanTemuan->uraian_temuan,
+                    'kategori_temuan' => $laporanTemuan->kategori_temuan,
+                    'saran_perbaikan' => $laporanTemuan->saran_perbaikan,
+                ],
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::warning('Laporan temuan not found: ' . $id);
             return response()->json([
                 'status' => false,
-                'message' => 'Laporan temuan tidak ditemukan',
+                'message' => 'Laporan temuan not found.',
             ], 404);
+        } catch (\Exception $e) {
+            Log::error('Error fetching laporan temuan: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to retrieve laporan temuan.',
+            ], 500);
         }
-
-        return response()->json([
-            'status' => true,
-            'data' => $laporan,
-            'message' => 'Detail laporan temuan berhasil diambil',
-        ], 200);
     }
 
     /**
-     * Update the specified laporan temuan in storage.
+     * Update the specified laporan temuan.
+     * This method now updates a SINGLE LaporanTemuan record identified by $id.
+     * The request body should contain the fields for that single finding.
      */
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request, $id)
     {
-        $laporan = LaporanTemuan::find($id);
-
-        if (!$laporan) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Laporan temuan tidak ditemukan',
-            ], 404);
-        }
-
         $validator = Validator::make($request->all(), [
+            // No 'findings' array here, validate individual fields
             'auditing_id' => 'required|exists:auditings,auditing_id',
-            'standar.kriteria_id' => 'required|array',
-            'standar.kriteria_id.*' => 'exists:kriterias,kriteria_id',
-            'standar.uraian_temuan' => 'required|array',
-            'standar.uraian_temuan.*' => 'string|max:1000',
-            'standar.kategori_temuan' => 'required|array',
-            'standar.kategori_temuan.*' => 'in:NC,AOC,OFI',
-            'standar.saran_perbaikan' => 'nullable|array',
-            'standar.saran_perbaikan.*' => 'string|max:1000',
+            'kriteria_id' => 'required|exists:kriteria,kriteria_id',
+            'uraian_temuan' => 'required|string|max:1000',
+            'kategori_temuan' => 'required|in:NC,AOC,OFI',
+            'saran_perbaikan' => 'nullable|string|max:1000',
         ], [
-            'auditing_id.required' => 'ID auditing wajib diisi.',
-            'standar.kriteria_id.required' => 'Kriteria wajib dipilih.',
-            'standar.kriteria_id.*.exists' => 'Kriteria tidak valid.',
-            'standar.uraian_temuan.required' => 'Uraian temuan wajib diisi.',
-            'standar.uraian_temuan.*.max' => 'Uraian temuan maksimal 1000 karakter.',
-            'standar.kategori_temuan.required' => 'Kategori temuan wajib dipilih.',
-            'standar.kategori_temuan.*.in' => 'Kategori temuan harus salah satu dari NC, AOC, atau OFI.',
+            'auditing_id.required' => 'Audit ID is required.',
+            'auditing_id.exists' => 'Invalid audit ID.',
+            'kriteria_id.required' => 'Standard ID is required.',
+            'kriteria_id.exists' => 'Invalid standard ID.',
+            'uraian_temuan.required' => 'Finding description is required.',
+            'kategori_temuan.required' => 'Finding category is required.',
+            'kategori_temuan.in' => 'Finding category must be NC, AOC, or OFI.',
         ]);
 
         if ($validator->fails()) {
+            Log::warning('Validation failed for updating laporan temuan: ' . json_encode($validator->errors()));
             return response()->json([
                 'status' => false,
-                'message' => 'Validasi gagal',
+                'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
             ], 422);
         }
 
-        $standar = $request->input('standar');
+        try {
+            // Find the specific LaporanTemuan record by its primary key
+            $laporanTemuan = LaporanTemuan::with('kriteria')->findOrFail($id);
 
-        $uraianTemuans = array_map(fn($item) => str_replace(',', ';', trim($item)), $standar['uraian_temuan']);
-        $kategoriTemuans = $standar['kategori_temuan'];
-        $saranPerbaikans = array_map(fn($item) => !empty($item) ? str_replace(',', ';', trim($item)) : '', $standar['saran_perbaikan'] ?? []);
-
-        DB::transaction(function () use ($laporan, $uraianTemuans, $kategoriTemuans, $saranPerbaikans, $standar) {
-            $laporan->update([
-                'auditing_id' => $laporan->auditing_id,
-                'uraian_temuan' => implode(',', $uraianTemuans),
-                'kategori_temuan' => implode(',', $kategoriTemuans),
-                'saran_perbaikan' => implode(',', $saranPerbaikans),
+            // Update its attributes
+            $laporanTemuan->update([
+                'auditing_id' => $request->auditing_id,
+                'kriteria_id' => $request->kriteria_id,
+                'uraian_temuan' => $request->uraian_temuan,
+                'kategori_temuan' => $request->kategori_temuan,
+                'saran_perbaikan' => $request->saran_perbaikan ?? null,
             ]);
 
-            $laporan->kriterias()->sync($standar['kriteria_id']);
-        });
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Laporan temuan berhasil diperbarui',
-            'data' => LaporanTemuan::with('kriterias', 'auditing')->find($laporan->laporan_temuan_id),
-        ], 200);
+            // Return the updated resource
+            return response()->json([
+                'status' => true,
+                'message' => 'Laporan temuan updated successfully.',
+                'data' => [
+                    'laporan_temuan_id' => $laporanTemuan->laporan_temuan_id,
+                    'auditing_id' => $laporanTemuan->auditing_id,
+                    'kriteria_id' => $laporanTemuan->kriteria_id,
+                    'nama_kriteria' => $laporanTemuan->kriteria->nama_kriteria ?? 'Tidak ada kriteria',
+                    'uraian_temuan' => $laporanTemuan->uraian_temuan,
+                    'kategori_temuan' => $laporanTemuan->kategori_temuan,
+                    'saran_perbaikan' => $laporanTemuan->saran_perbaikan,
+                ],
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::warning('Laporan temuan not found for update: ' . $id);
+            return response()->json([
+                'status' => false,
+                'message' => 'Laporan temuan not found.',
+            ], 404);
+        } catch (\Exception $e) {
+            Log::error('Error updating laporan temuan: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to update laporan temuan.',
+            ], 500);
+        }
     }
 
     /**
-     * Remove the specified laporan temuan from storage.
+     * Remove the specified laporan temuan.
      */
-    public function destroy($id): JsonResponse
+    public function destroy($id)
     {
-        $laporan = LaporanTemuan::find($id);
-
-        if (!$laporan) {
+        try {
+            // Find by primaryKey 'laporan_temuan_id'
+            $laporanTemuan = LaporanTemuan::findOrFail($id); // No need to eager load kriteria for deletion
+            $laporanTemuan->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Laporan temuan deleted successfully.',
+            ], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::warning('Laporan temuan not found for deletion: ' . $id);
             return response()->json([
                 'status' => false,
-                'message' => 'Laporan temuan tidak ditemukan',
+                'message' => 'Laporan temuan not found.',
             ], 404);
+        } catch (\Exception $e) {
+            Log::error('Error deleting laporan temuan: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to delete laporan temuan.',
+            ], 500);
         }
-
-        $laporan->delete();
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Laporan temuan berhasil dihapus',
-        ], 200);
     }
 }
-
