@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('laporan_temuan_id');
             $table->unsignedBigInteger('auditing_id');
             $table->unsignedBigInteger('kriteria_id');
-            $table->text('uraian_temuan')->nullable();
+            $table->text('uraian_temuan');
             $table->enum('kategori_temuan', ['NC', 'AOC', 'OFI']);
             $table->text('saran_perbaikan')->nullable();
 

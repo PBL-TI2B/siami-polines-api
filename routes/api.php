@@ -200,8 +200,8 @@ Route::prefix('set-instrumen')->group(function(){
 Route::prefix('laporan-temuan')->group(function () {
     Route::get('/', [LaporanTemuanController::class, 'index']);
     Route::post('/', [LaporanTemuanController::class, 'store']);
-    Route::get('/{auditing_id}/{laporan_temuan_id}', [LaporanTemuanController::class, 'show']);
-    Route::put('/{laporan_temuan_id}', [LaporanTemuanController::class, 'update']);
+    Route::get('/{id}', [LaporanTemuanController::class, 'show']);
+    Route::put('/{id}', [LaporanTemuanController::class, 'update']);
     Route::delete('/{id}', [LaporanTemuanController::class, 'destroy']);
 
 });
