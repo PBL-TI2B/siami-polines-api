@@ -15,12 +15,14 @@ return new class extends Migration
             $table->id('laporan_temuan_id');
             $table->unsignedBigInteger('auditing_id');
             $table->unsignedBigInteger('kriteria_id');
+            $table->unsignedBigInteger('response_tilik_id');
             $table->text('uraian_temuan');
             $table->enum('kategori_temuan', ['NC', 'AOC', 'OFI']);
             $table->text('saran_perbaikan')->nullable();
 
             $table->foreign('auditing_id')->references('auditing_id')->on('auditings')->onDelete('cascade');
             $table->foreign('kriteria_id')->references('kriteria_id')->on('kriteria')->onDelete('cascade');
+            $table->foreign('response_tilik_id')->references('response_tilik_id')->on('response_tilik')->onDelete('cascade');
         });
 
         // Schema::create('laporan_temuan_kriteria', function (Blueprint $table) {
