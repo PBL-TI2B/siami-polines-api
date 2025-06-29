@@ -31,4 +31,9 @@ class LaporanTemuan extends Model
     {
         return $this->belongsTo(ResponseTilik::class, 'response_tilik_id');
     }
+
+    public function getKriteriaAttribute()
+    {
+        return $this->tilik ? $this->tilik->kriteria : null;
+    }
 }

@@ -20,27 +20,19 @@ class LaporanTemuanController extends Controller
     {
         try {
             $auditingId = $request->query('auditing_id');
-            $query = LaporanTemuan::with('kriteria'); // Eager load kriteria untuk nama_kriteria
+
+            // Use with() to eager load all necessary relationships
+            $query = LaporanTemuan::with([
+                'kriteria',
+                'response_tilik',
+                'auditing'
+            ]);
 
             if ($auditingId) {
                 $query->where('auditing_id', $auditingId);
             }
 
-            $laporanTemuans = $query->get()->map(function ($laporan) {
-                return [
-                    'laporan_temuan_id' => $laporan->laporan_temuan_id,
-                    'auditing_id' => $laporan->auditing_id,
-                    'kriteria_id' => $laporan->kriteria_id,
-                    'nama_kriteria' => $laporan->kriteria->nama_kriteria ?? 'Tidak ada kriteria',
-                    'response_tilik_id'=> $laporan->response_tilik_id,
-                    'standar' => $laporan->response_tilik->standar_nasional ?? 'Tidak ada standar',
-                    'analisis_penyebab' => $laporan->response_tilik->akar_penyebab_penunjang ?? 'Tidak ada penyebab',
-                    'tindakan_perbaikan' => $laporan->response_tilik->rencana_perbaikan_tindak_lanjut ?? 'Tidak ada rencana perbaikan',
-                    'uraian_temuan' => $laporan->uraian_temuan,
-                    'kategori_temuan' => $laporan->kategori_temuan,
-                    'saran_perbaikan' => $laporan->saran_perbaikan,
-                ];
-            });
+            $laporanTemuans = $query->get();
 
             return response()->json([
                 'status' => true,
@@ -66,9 +58,7 @@ class LaporanTemuanController extends Controller
             'auditing_id' => 'required|exists:auditings,auditing_id',
             'findings' => 'required|array|min:1',
             'findings.*.kriteria_id' => 'required|exists:kriteria,kriteria_id',
-            // Corrected table name based on your model: 'response_tiliks' or 'response_tilik'?
-            // Your model is `response_tilik`, so the table name should likely be `response_tilik`
-            'findings.*.response_tilik_id' => 'nullable|exists:response_tilik,response_tilik_id', // Changed from response_tiliks to response_tilik
+            'findings.*.response_tilik_id' => 'nullable|exists:response_tilik,response_tilik_id',
             'findings.*.uraian_temuan' => 'required|string|max:1000',
             'findings.*.kategori_temuan' => 'required|in:NC,AOC,OFI',
             'findings.*.saran_perbaikan' => 'nullable|string|max:1000',
@@ -107,17 +97,15 @@ class LaporanTemuanController extends Controller
                 ]);
 
                 // 2. Load the relationships after creation
-                // This is crucial to access `kriteria->nama_kriteria` and `response_tilik->standar_nasional` etc.
                 $laporanTemuan->load('kriteria', 'response_tilik');
 
-                // 3. Prepare the data for the response, accessing relationships directly
+                // 3. Prepare the data for the response
                 $createdFindings[] = [
                     'laporan_temuan_id' => $laporanTemuan->laporan_temuan_id,
                     'auditing_id' => $laporanTemuan->auditing_id,
                     'kriteria_id' => $laporanTemuan->kriteria_id,
                     'nama_kriteria' => $laporanTemuan->kriteria->nama_kriteria ?? 'Tidak ada kriteria',
                     'response_tilik_id' => $laporanTemuan->response_tilik_id,
-                    // Safely access properties from response_tilik, check if relation exists and not null
                     'standar' => $laporanTemuan->response_tilik ? ($laporanTemuan->response_tilik->standar_nasional ?? 'Tidak ada standar') : 'Tidak ada standar',
                     'analisis_penyebab' => $laporanTemuan->response_tilik ? ($laporanTemuan->response_tilik->akar_penyebab_penunjang ?? 'Tidak ada penyebab') : 'Tidak ada penyebab',
                     'tindakan_perbaikan' => $laporanTemuan->response_tilik ? ($laporanTemuan->response_tilik->rencana_perbaikan_tindak_lanjut ?? 'Tidak ada rencana perbaikan') : 'Tidak ada rencana perbaikan',
@@ -148,7 +136,8 @@ class LaporanTemuanController extends Controller
     {
         try {
             // Find by primaryKey 'laporan_temuan_id'
-            $laporanTemuan = LaporanTemuan::with('kriteria','response_tilik')->findOrFail($id);
+            $laporanTemuan = LaporanTemuan::with('kriteria', 'response_tilik')->findOrFail($id);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Laporan temuan retrieved successfully.',
@@ -157,10 +146,10 @@ class LaporanTemuanController extends Controller
                     'auditing_id' => $laporanTemuan->auditing_id,
                     'kriteria_id' => $laporanTemuan->kriteria_id,
                     'nama_kriteria' => $laporanTemuan->kriteria->nama_kriteria ?? 'Tidak ada kriteria',
-                    'response_tilik_id'=> $laporanTemuan->response_tilik_id,
-                    'standar' => $laporanTemuan->response_tilik->standar_nasional ?? 'Tidak ada standar',
-                    'analisis_penyebab' => $laporanTemuan->response_tilik->akar_penyebab_penunjang ?? 'Tidak ada penyebab',
-                    'tindakan_perbaikan' => $laporanTemuan->response_tilik->rencana_perbaikan_tindak_lanjut ?? 'Tidak ada rencana perbaikan',
+                    'response_tilik_id' => $laporanTemuan->response_tilik_id,
+                    'standar' => $laporanTemuan->response_tilik ? ($laporanTemuan->response_tilik->standar_nasional ?? 'Tidak ada standar') : 'Tidak ada standar',
+                    'analisis_penyebab' => $laporanTemuan->response_tilik ? ($laporanTemuan->response_tilik->akar_penyebab_penunjang ?? 'Tidak ada penyebab') : 'Tidak ada penyebab',
+                    'tindakan_perbaikan' => $laporanTemuan->response_tilik ? ($laporanTemuan->response_tilik->rencana_perbaikan_tindak_lanjut ?? 'Tidak ada rencana perbaikan') : 'Tidak ada rencana perbaikan',
                     'uraian_temuan' => $laporanTemuan->uraian_temuan,
                     'kategori_temuan' => $laporanTemuan->kategori_temuan,
                     'saran_perbaikan' => $laporanTemuan->saran_perbaikan,
@@ -183,8 +172,6 @@ class LaporanTemuanController extends Controller
 
     /**
      * Update the specified laporan temuan.
-     * This method now updates a SINGLE LaporanTemuan record identified by $id.
-     * The request body should contain the fields for that single finding.
      */
     public function update(Request $request, $id)
     {
@@ -268,9 +255,9 @@ class LaporanTemuanController extends Controller
     public function destroy($id)
     {
         try {
-            // Find by primaryKey 'laporan_temuan_id'
-            $laporanTemuan = LaporanTemuan::findOrFail($id); // No need to eager load kriteria for deletion
+            $laporanTemuan = LaporanTemuan::findOrFail($id);
             $laporanTemuan->delete();
+
             return response()->json([
                 'status' => true,
                 'message' => 'Laporan temuan deleted successfully.',
