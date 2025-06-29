@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('uraian_isian')->nullable();
             $table->text('akar_penyebab_penunjang')->nullable();
             $table->text('rencana_perbaikan_tindak_lanjut')->nullable();
+            $table->text('tindakan_pencegahan')->nullable();
 
             $table->foreign('auditing_id')->references('auditing_id')->on('auditings')->onDelete('cascade');
             $table->foreign('tilik_id')->references('tilik_id')->on('tilik')->onDelete('cascade');

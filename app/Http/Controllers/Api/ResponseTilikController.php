@@ -34,6 +34,7 @@ class ResponseTilikController extends Controller
             'uraian_isian' => 'required|string',
             'akar_penyebab_penunjang' => 'required|string',
             'rencana_perbaikan_tindak_lanjut' => 'required|string',
+            'tindakan_pencegahan' => 'required|string',
         ]);
 
         $responseTilik = new ResponseTilik();
@@ -44,6 +45,7 @@ class ResponseTilikController extends Controller
         $responseTilik->uraian_isian = $request->uraian_isian;
         $responseTilik->akar_penyebab_penunjang = $request->akar_penyebab_penunjang;
         $responseTilik->rencana_perbaikan_tindak_lanjut = $request->rencana_perbaikan_tindak_lanjut;
+        $responseTilik->tindakan_pencegahan = $request->tindakan_pencegahan;
         $responseTilik->save();
 
         $responseTilik->load('auditing', 'tilik');
@@ -57,7 +59,8 @@ class ResponseTilikController extends Controller
                 'standar_nasional' => $responseTilik->standar_nasional,
                 'uraian_isian' => $responseTilik->uraian_isian,
                 'akar_penyebab_penunjang' => $responseTilik->akar_penyebab_penunjang,
-                'rencana_perbaikan_tindak_lanjut' => $responseTilik->rencana_perbaikan_tindak_lanjut
+                'rencana_perbaikan_tindak_lanjut' => $responseTilik->rencana_perbaikan_tindak_lanjut,
+                'tindakan_pencegahan' => $responseTilik->tindakan_pencegahan
             ]
         ], 201);
     }
@@ -87,6 +90,7 @@ class ResponseTilikController extends Controller
             'uraian_isian' => 'required|string',
             'akar_penyebab_penunjang' => 'required|string',
             'rencana_perbaikan_tindak_lanjut' => 'required|string',
+            'tindakan_pencegahan' => 'required|string',
         ]);
 
         // Update data yang sudah ada
@@ -97,6 +101,7 @@ class ResponseTilikController extends Controller
         $responseTilik->uraian_isian = $request->uraian_isian;
         $responseTilik->akar_penyebab_penunjang = $request->akar_penyebab_penunjang;
         $responseTilik->rencana_perbaikan_tindak_lanjut = $request->rencana_perbaikan_tindak_lanjut;
+        $responseTilik->tindakan_pencegahan = $request->tindakan_pencegahan;
         $responseTilik->save();
 
         $responseTilik->load('auditing', 'tilik');
@@ -111,7 +116,8 @@ class ResponseTilikController extends Controller
                 'standar_nasional' => $responseTilik->standar_nasional,
                 'uraian_isian' => $responseTilik->uraian_isian,
                 'akar_penyebab_penunjang' => $responseTilik->akar_penyebab_penunjang,
-                'rencana_perbaikan_tindak_lanjut' => $responseTilik->rencana_perbaikan_tindak_lanjut
+                'rencana_perbaikan_tindak_lanjut' => $responseTilik->rencana_perbaikan_tindak_lanjut,
+                'tindakan_pencegahan' => $responseTilik->tindakan_pencegahan
             ]
         ], 200);
     }

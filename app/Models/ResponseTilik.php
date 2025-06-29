@@ -20,6 +20,7 @@ class ResponseTilik extends Model
         'uraian_isian',
         'akar_penyebab',
         'rencana_perbaikan',
+        'tindakan_pencegahan',
     ];
     public function auditing()
     {
