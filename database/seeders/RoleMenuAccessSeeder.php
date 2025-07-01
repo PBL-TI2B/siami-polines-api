@@ -28,6 +28,7 @@ class RoleMenuAccessSeeder extends Seeder
             // Auditor (role_id: 2) - Akses menu audit
             ['role_id' => 2, 'menu_id' => $menus['Dashboard']->menu_id],
             ['role_id' => 2, 'menu_id' => $menus['Audit']->menu_id],
+            ['role_id' => 2, 'menu_id' => $menus['Riwayat Audit']->menu_id],
             // ['role_id' => 2, 'menu_id' => $menus['Daftar Tilik']->menu_id],
             // ['role_id' => 2, 'menu_id' => $menus['Assesmen Lapangan']->menu_id],
             // ['role_id' => 2, 'menu_id' => $menus['Laporan']->menu_id],
