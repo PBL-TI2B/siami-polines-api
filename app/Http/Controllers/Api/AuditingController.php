@@ -88,7 +88,14 @@ class AuditingController extends Controller
 
     public function show($id)
     {
-        $auditing = Auditing::find($id);
+        $auditing = Auditing::with([
+            'auditor1',
+            'auditor2',
+            'auditee1',
+            'auditee2',
+            'unitKerja',
+            'periode',
+        ])->find($id);
         if (!$auditing) {
             return response()->json(['message' => 'Data tidak ditemukan.'], 404);
         }
