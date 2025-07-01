@@ -23,7 +23,7 @@ class RoleMenuAccessSeeder extends Seeder
             ['role_id' => 1, 'menu_id' => $menus['Data Unit']->menu_id],
             ['role_id' => 1, 'menu_id' => $menus['Data Instrumen']->menu_id],
             ['role_id' => 1, 'menu_id' => $menus['Data User']->menu_id],
-            ['role_id' => 1, 'menu_id' => $menus['Laporan']->menu_id],
+            // ['role_id' => 1, 'menu_id' => $menus['Laporan']->menu_id],
 
             // Auditor (role_id: 2) - Akses menu audit
             ['role_id' => 2, 'menu_id' => $menus['Dashboard']->menu_id],
