@@ -24,8 +24,8 @@ class PeriodeAuditSeeder extends Seeder
             ],
             [
                 'nama_periode' => 'AMI 2025',
-                'tanggal_mulai' => '2025-10-20',
-                'tanggal_berakhir' => '2025-11-07',
+                'tanggal_mulai' => '2025-06-20',
+                'tanggal_berakhir' => '2025-08-07',
                 'status' => 'Sedang Berjalan',
             ],
         ];
