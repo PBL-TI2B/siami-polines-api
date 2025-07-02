@@ -29,12 +29,12 @@ class ResponseTilikController extends Controller
         $request->validate([
             'auditing_id' => 'required|exists:auditings,auditing_id',
             'tilik_id' => 'required|exists:tilik,tilik_id',
-            'realisasi' => 'required|string',
-            'standar_nasional' => 'required|string',
-            'uraian_isian' => 'required|string',
-            'akar_penyebab_penunjang' => 'required|string',
-            'rencana_perbaikan_tindak_lanjut' => 'required|string',
-            'tindakan_pencegahan' => 'required|string',
+            'realisasi' => 'string|nullable',
+            'standar_nasional' => 'string|nullable',
+            'uraian_isian' => 'string|nullable',
+            'akar_penyebab_penunjang' => 'string|nullable',
+            'rencana_perbaikan_tindak_lanjut' => 'string|nullable',
+            'tindakan_pencegahan' => 'string|nullable',
         ]);
 
         $responseTilik = new ResponseTilik();
@@ -85,12 +85,12 @@ class ResponseTilikController extends Controller
         $request->validate([
             'auditing_id' => 'required|exists:auditings,auditing_id',
             'tilik_id' => 'required|exists:tilik,tilik_id',
-            'realisasi' => 'required|string',
-            'standar_nasional' => 'required|string',
-            'uraian_isian' => 'required|string',
-            'akar_penyebab_penunjang' => 'required|string',
-            'rencana_perbaikan_tindak_lanjut' => 'required|string',
-            'tindakan_pencegahan' => 'required|string',
+            'realisasi' => 'string|nullable',
+            'standar_nasional' => 'string|nullable',
+            'uraian_isian' => 'string|nullable',
+            'akar_penyebab_penunjang' => 'string|nullable',
+            'rencana_perbaikan_tindak_lanjut' => 'string|nullable',
+            'tindakan_pencegahan' => 'string|nullable',
         ]);
 
         // Update data yang sudah ada
