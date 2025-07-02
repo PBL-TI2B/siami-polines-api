@@ -71,6 +71,34 @@ class UserSeeder extends Seeder
             'nama' => 'auditor 2',
             'nip' => '1234567898', // pastikan unik
             ],
+            ['role_id' => 2,
+            'unit_kerja_id' => 17,
+            'email' => 'kuwatsantoso@gmail.com',
+            'password' => Hash::make('kuwat123'), // menggunakan hash
+            'nama' => 'KUWAT SANTOSO , S.T., M.Kom.',
+            'nip' => '198407192019031008', // pastikan unik
+            ],
+            ['role_id' => 2,
+            'unit_kerja_id' => 21,
+            'email' => 'idhawati@gmail.com',
+            'password' => Hash::make('idhawati123'), // menggunakan hash
+            'nama' => 'IDHAWATI HESTININGSIH, S.KOM., M. KOM.',
+            'nip' => '197711192008012013', // pastikan unik
+            ],
+            ['role_id' => 3,
+            'unit_kerja_id' => 17,
+            'email' => 'wiktasari@gmail.com',
+            'password' => Hash::make('wikta123'), // menggunakan hash
+            'nama' => 'WIKTASARI , S.T., M.KOM',
+            'nip' => '198703272019032012', // pastikan unik
+            ],
+            ['role_id' => 3,
+            'unit_kerja_id' => 17,
+            'email' => 'prayitno@gmail.com',
+            'password' => Hash::make('prayitno123'), // menggunakan hash
+            'nama' => 'PRAYITNO , S.ST., M.T., Ph.D.',
+            'nip' => '198504102014041002', // pastikan unik
+            ],
         ]);
 
     }
