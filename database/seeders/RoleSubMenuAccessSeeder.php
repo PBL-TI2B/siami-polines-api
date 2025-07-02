@@ -14,6 +14,14 @@ class RoleSubMenuAccessSeeder extends Seeder
 
         $subMenus = SubMenu::all()->keyBy('nama_sub_menu');
 
+        // Validate that all required sub-menus exist
+        $requiredSubMenus = ['Daftar UPT', 'Daftar Prodi', 'Daftar Jurusan', 'Instrumen UPT', 'Instrumen Prodi', 'Instrumen Jurusan'];
+        foreach ($requiredSubMenus as $subMenuName) {
+            if (!$subMenus->has($subMenuName)) {
+                throw new \Exception("Required sub-menu '{$subMenuName}' not found. Please run MenuSeeder first.");
+            }
+        }
+
         $access = [
             // Admin (role_id: 1) - Akses semua sub-menu
             ['role_id' => 1, 'sub_menu_id' => $subMenus['Daftar UPT']->sub_menu_id],
@@ -40,10 +48,6 @@ class RoleSubMenuAccessSeeder extends Seeder
             ['role_id' => 4, 'sub_menu_id' => $subMenus['Instrumen UPT']->sub_menu_id],
             ['role_id' => 4, 'sub_menu_id' => $subMenus['Instrumen Prodi']->sub_menu_id],
             ['role_id' => 4, 'sub_menu_id' => $subMenus['Instrumen Jurusan']->sub_menu_id],
-
-            // Admin UPT (role_id: 5) - Hanya akses Daftar UPT dan Instrumen UPT
-            ['role_id' => 5, 'sub_menu_id' => $subMenus['Daftar UPT']->sub_menu_id],
-            ['role_id' => 5, 'sub_menu_id' => $subMenus['Instrumen UPT']->sub_menu_id],
         ];
 
         RoleSubMenuAccess::insert($access);
