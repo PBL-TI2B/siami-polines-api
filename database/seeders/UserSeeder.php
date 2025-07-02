@@ -43,13 +43,6 @@ class UserSeeder extends Seeder
             'nama' => 'admin',
             'nip' => '1234567893', // pastikan unik
             ],
-            ['role_id' => 5,
-            'unit_kerja_id' => 1,
-            'email' => 'adminunit@gmail.com',
-            'password' => Hash::make('adminunit123456'), // menggunakan hash
-            'nama' => 'admin',
-            'nip' => '1234567894', // pastikan unik
-            ],
             ['role_id' => 3,
             'unit_kerja_id' => 1,
             'email' => 'auditee1@gmail.com',
